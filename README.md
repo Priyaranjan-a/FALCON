@@ -74,6 +74,11 @@ The same sign-in is printed in the terminal. Change the password under
 *Settings → Password & devices*. To start empty with the setup assistant
 instead, add `-NoDemo` (Windows) or `--no-demo` (Linux/macOS).
 
+> **Already have a `data/` folder?** FALCON keeps it and does not create the
+> demonstration account, so sign in with the account you made. The terminal
+> names it at start-up. To get the demonstration instead, stop FALCON, delete
+> the `data/` folder and start again.
+
 <details>
 <summary><b>Other ways to run FALCON</b>: Docker, the Windows desktop app, the CI command line</summary>
 

@@ -6,7 +6,7 @@ import time
 
 from fastapi.testclient import TestClient
 
-from conftest import WRITE
+from conftest import SETUP, WRITE
 
 
 def test_demo_seeds_a_fresh_installation_once(monkeypatch, request, capsys) -> None:
@@ -48,5 +48,24 @@ def test_demo_seeds_a_fresh_installation_once(monkeypatch, request, capsys) -> N
     # A second start never re-seeds an installation that exists.
     from falcon import demo
 
+    capsys.readouterr()
     assert demo.seed() is False
     assert client.get("/api/v1/systems").json()["total"] == 10
+    assert "admin@falcon.local" in capsys.readouterr().out  # the sign-in is repeated, not lost
+
+
+def test_an_installation_owned_by_someone_else_says_so(monkeypatch, request, capsys) -> None:
+    """Started with --demo over an existing installation: name the owner instead of failing silently."""
+    monkeypatch.setenv("FALCON_DEMO", "false")
+    client: TestClient = request.getfixturevalue("client")
+    assert client.post("/api/v1/setup", json=SETUP).status_code == 201
+
+    from falcon import demo
+
+    monkeypatch.setenv("FALCON_DEMO", "true")
+    capsys.readouterr()
+    assert demo.seed() is False
+    printed = capsys.readouterr().out
+    assert SETUP["owner"]["email"] in printed, printed
+    assert "already set up" in printed and "start fresh" in printed
+    assert "Quantum-Safe-2026!" not in printed  # never suggest a password that does not work here

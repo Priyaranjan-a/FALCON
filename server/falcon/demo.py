@@ -109,6 +109,29 @@ def banner(fresh: bool) -> None:
         logger.info("Demo sign-in: %s", email)
 
 
+def existing(owner_email: str | None) -> None:
+    """This installation is already set up, but not with the demo account."""
+    settings = get_settings()
+    url = f"http://{'127.0.0.1' if settings.host in ('0.0.0.0', '::') else settings.host}:{settings.port}"
+    rule = "  " + "-" * 64
+    lines = [
+        "",
+        rule,
+        f"  FALCON is already set up - open {url}",
+        f"    Sign in as:  {owner_email}" if owner_email else "    Sign in with the account you created.",
+        "",
+        "  This installation has its own data, so the demonstration account was",
+        "  not created. To start fresh instead, stop FALCON and remove:",
+        f"    {settings.data_dir.resolve()}",
+        rule,
+        "",
+    ]
+    try:
+        print("\n".join(lines), flush=True)
+    except (OSError, ValueError):
+        logger.info("FALCON is already set up; sign in as %s", owner_email)
+
+
 def seed() -> bool:
     """Creates the demonstration organisation if FALCON is not set up yet. Returns True if it did."""
     from .domains.discovery import service as discovery
@@ -127,6 +150,10 @@ def seed() -> bool:
             admin = db.scalar(select(User).where(User.email == email))
             if admin is not None and verify_password(password, admin.password_hash):
                 banner(fresh=False)
+            else:
+                # Already set up under another account: say whose, so nobody is left guessing.
+                owner = db.scalar(select(User).where(User.role == "owner"))
+                existing(owner.email if owner else None)
             return False
         org, owner, _ = run_setup(
             db, profile=OrganisationProfileIn(**ORGANISATION), threat=ThreatModelIn(crqc_scenario="moderate", risk_tolerance=0.05),

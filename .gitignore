@@ -29,3 +29,6 @@ Thumbs.db
 /desktop/src-tauri/target/
 /desktop/src-tauri/target-release/
 /desktop/src-tauri/gen/
+
+# Local data backups (never publish: they contain the database and attestation keys)
+/data-backup-*/
