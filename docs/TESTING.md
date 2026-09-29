@@ -26,7 +26,7 @@ Continuous integration (`.github/workflows/ci.yml`) runs both on every push:
 
 ## Server tests
 
-More than 320 tests. API tests run against a fresh database built by the real
+325 tests. API tests run against a fresh database built by the real
 Alembic migrations, so the migration chain is exercised on every run.
 
 | Area | Files | What is verified |

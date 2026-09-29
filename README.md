@@ -201,7 +201,7 @@ feasibility and impact are in the
 - **Air-gapped:** no outbound calls; fonts, knowledge bases and rule packs are
   bundled.
 - **Tested:**
-  - Over 320 server tests, and every API test runs on a fresh database built
+  - 325 server tests, and every API test runs on a fresh database built
     by the real migrations.
   - Exports are validated against the official CycloneDX, SARIF and SPDX
     schemas, and signatures are cross-checked with OpenSSL.
