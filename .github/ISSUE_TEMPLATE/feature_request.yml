@@ -1,0 +1,42 @@
+name: Feature request
+description: Suggest an improvement to FALCON
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the situation you are in, rather than the solution you have in mind.
+      placeholder: >-
+        Our estate includes mainframe code, and FALCON has no detector for it, so
+        that cryptography is missing from the inventory.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like FALCON to do?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of FALCON?
+      options:
+        - Discovery (detectors, scan sources)
+        - Risk (Mosca, scoring, compliance)
+        - Migration (recommendations, planning, benchmarks)
+        - Reporting (CBOM, SARIF, SPDX, attestations)
+        - Console or desktop app
+        - Command line and CI
+        - Documentation
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you have considered

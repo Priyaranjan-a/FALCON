@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+title: "FALCON: Enterprise Cryptographic Discovery and Post-Quantum Migration Intelligence"
+message: "If you use FALCON in your work, please cite it as below."
+type: software
+authors:
+  - name: "Team THETA172"
+    website: "https://github.com/shriomverma100/FALCON"
+repository-code: "https://github.com/shriomverma100/FALCON"
+url: "https://github.com/shriomverma100/FALCON"
+abstract: >-
+  FALCON discovers the cryptography an organisation depends on across source
+  code, binaries, libraries, container images, certificates, keys, protocol
+  configuration, live TLS endpoints and cloud key management. It measures the
+  exposure of each finding to a cryptographically relevant quantum computer
+  using Mosca's inequality, maps it to the NIST, NSA and EU transition
+  deadlines, and recommends ML-KEM, ML-DSA or hybrid replacements benchmarked
+  on the host. It produces a CycloneDX 1.6 cryptography bill of materials,
+  SARIF, SPDX and CSV reports, and snapshots signed with ML-DSA-65 that third
+  parties can verify. Built for Smart India Hackathon problem statement 26164
+  (Enterprise Cryptographic Discovery and Analysis Tool), set by the National
+  Technical Research Organisation.
+keywords:
+  - post-quantum cryptography
+  - cryptographic inventory
+  - CBOM
+  - CycloneDX
+  - Mosca's inequality
+  - harvest now decrypt later
+  - ML-KEM
+  - ML-DSA
+  - FIPS 203
+  - FIPS 204
+  - migration planning
+  - SARIF
+license: MIT
+version: 1.0.0
+date-released: "2026-09-29"

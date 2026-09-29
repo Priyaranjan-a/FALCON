@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/shriomverma100/FALCON/security/advisories/new
+    about: Please report vulnerabilities privately, not as a public issue.
+  - name: Documentation
+    url: https://github.com/shriomverma100/FALCON/tree/main/docs
+    about: The user guide, risk methodology, reporting, architecture, API and operations.
+  - name: Ask a question
+    url: https://github.com/shriomverma100/FALCON/discussions
+    about: For questions about using FALCON, rather than a bug or a request.

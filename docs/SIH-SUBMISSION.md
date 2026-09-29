@@ -2,6 +2,8 @@
 
 | | |
 |---|---|
+| **Team** | THETA172 |
+| **Project** | FALCON |
 | **Problem statement** | 26164: Enterprise Cryptographic Discovery & Analysis Tool (ECDAT) |
 | **Organisation** | National Technical Research Organisation (NTRO) |
 | **Category** | Software |
@@ -231,7 +233,7 @@ and real scans.
 
 **Quality:**
 
-- 325 server tests, run on Windows and on Linux (Debian trixie).
+- 326 server tests, run on Windows and on Linux (Debian trixie).
 - API tests run on fresh databases built by the real migrations.
 - Exports are validated against the official CycloneDX 1.6, SARIF 2.1.0 and
   SPDX 2.3 schemas.

@@ -30,8 +30,8 @@
   "bundle": {
     "active": true,
     "targets": ["nsis"],
-    "publisher": "Shriom Verma",
-    "copyright": "Copyright © 2026 Shriom Verma. MIT License.",
+    "publisher": "Team THETA172",
+    "copyright": "Copyright © 2026 Team THETA172. MIT License.",
     "category": "DeveloperTool",
     "shortDescription": "Enterprise cryptographic discovery and quantum-risk analysis",
     "longDescription": "FALCON discovers the cryptography in source code, binaries, libraries, container images, certificates, keys, protocol configuration and live TLS endpoints, and assesses it against the quantum threat.",

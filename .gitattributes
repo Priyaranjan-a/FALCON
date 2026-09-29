@@ -1,0 +1,25 @@
+# Normalise line endings so the repository is identical on every platform.
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF.
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Binary assets are never converted or diffed as text.
+*.png  binary
+*.webp binary
+*.gif  binary
+*.mp4  binary
+*.ico  binary
+*.icns binary
+*.woff2 binary
+*.jar  binary
+*.so   binary
+*.tar  binary
+*.exe  binary
+
+# Generated or vendored files are excluded from language statistics.
+docs/api/openapi.json  linguist-generated
+fixtures/**            linguist-vendored
+docs/media/**          linguist-documentation

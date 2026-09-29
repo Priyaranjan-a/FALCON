@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "license": "MIT",
-  "author": "Shriom Verma",
+  "author": "Team THETA172",
   "description": "FALCON desktop app: the discovery engine and console in a native window.",
   "scripts": {
     "tauri": "tauri",

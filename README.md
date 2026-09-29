@@ -2,48 +2,59 @@
   <img src="docs/media/hero.webp" alt="FALCON: find every key, measure quantum risk, migrate in time" width="100%">
 </p>
 
+<h1 align="center">FALCON</h1>
+
 <p align="center">
-  <a href="https://github.com/shriomverma100/FALCON/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/shriomverma100/FALCON/actions/workflows/ci.yml/badge.svg"></a>
-  <img alt="Smart India Hackathon, problem statement 26164" src="https://img.shields.io/badge/SIH-PS%2026164%20·%20ECDAT-0A84FF">
-  <img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-2ea44f">
-  <img alt="NIST FIPS 203 and 204" src="https://img.shields.io/badge/NIST-FIPS%20203%20·%20204-5E5CE6">
+  <b>Find every key. Measure the quantum risk. Migrate in time.</b><br>
+  <sub>Enterprise Cryptographic Discovery &amp; Analysis Tool · Team <b>THETA172</b></sub>
+</p>
+
+<p align="center">
+  <a href="https://github.com/shriomverma100/FALCON/actions/workflows/ci.yml"><img alt="CI status" src="https://github.com/shriomverma100/FALCON/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="326 tests" src="https://img.shields.io/badge/tests-326%20passing-2ea44f">
+  <a href="LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-2ea44f"></a>
+  <img alt="Smart India Hackathon, problem statement 26164" src="https://img.shields.io/badge/SIH-PS%2026164%20%C2%B7%20NTRO-0A84FF">
+  <br>
+  <img alt="NIST FIPS 203 and 204" src="https://img.shields.io/badge/NIST-FIPS%20203%20%C2%B7%20204%20%C2%B7%20205-5E5CE6">
   <img alt="CycloneDX 1.6 CBOM" src="https://img.shields.io/badge/CycloneDX-1.6%20CBOM-F4511E">
+  <img alt="SARIF 2.1.0" src="https://img.shields.io/badge/SARIF-2.1.0-F4511E">
+  <img alt="SPDX 2.3" src="https://img.shields.io/badge/SPDX-2.3-F4511E">
   <img alt="Python 3.12+" src="https://img.shields.io/badge/python-3.12%2B-3776AB">
   <img alt="React 19" src="https://img.shields.io/badge/react-19-149ECA">
 </p>
 
 <p align="center">
-  <b>Enterprise Cryptographic Discovery &amp; Analysis Tool (ECDAT)</b><br>
-  Smart India Hackathon · problem statement <b>26164</b> · National Technical Research Organisation
-</p>
-
-<p align="center">
-  <a href="#run-it-in-one-command">Run it</a> ·
-  <a href="#see-it-in-action">Tour</a> ·
-  <a href="#what-falcon-does">Features</a> ·
-  <a href="#how-falcon-meets-problem-statement-26164">PS 26164 mapping</a> ·
-  <a href="#documentation">Documentation</a>
+  <a href="#-run-it-in-one-command"><b>Run it</b></a> ·
+  <a href="#-see-it-working"><b>Watch the tour</b></a> ·
+  <a href="#-what-falcon-does"><b>What it does</b></a> ·
+  <a href="#-how-falcon-answers-problem-statement-26164"><b>PS 26164</b></a> ·
+  <a href="#-documentation"><b>Docs</b></a>
 </p>
 
 ---
 
-**FALCON finds every piece of cryptography an organisation depends on, measures
-how exposed each one is to a quantum computer, and plans and proves the move to
-post-quantum cryptography.** It scans source code, binaries, libraries, container
-images, certificates, keys, protocol configuration, live TLS endpoints and cloud
-key management. It scores each finding with Mosca's inequality and the NIST, NSA
-and EU deadlines, and recommends the ML-KEM, ML-DSA or hybrid replacement,
-measured on your own hardware. It then produces the evidence: a CycloneDX 1.6
-cryptography bill of materials (CBOM), SARIF for code scanning, SPDX, and
-snapshots signed with post-quantum ML-DSA that anyone can verify with OpenSSL.
+## The problem, in one paragraph
 
-It runs fully on-premises and air-gapped, as a web platform, a Windows desktop
-app, a Docker container, or a command line inside CI pipelines.
+Every organisation runs on RSA, Diffie-Hellman and elliptic-curve cryptography:
+in TLS, in SSH, in VPNs, in certificates, in signed firmware, in hardware
+security modules. A quantum computer running Shor's algorithm breaks all of it.
+That day has not arrived, but **the damage starts now**: an adversary recording
+your traffic today can decrypt it the moment it does. NIST disallows
+quantum-vulnerable public-key cryptography after 2035 and deprecates it after
+2030. Yet almost nobody can answer the first question a migration requires —
+*where is our cryptography?* It is scattered across source code, third-party
+libraries, compiled binaries, container images, configuration files and cloud
+key stores.
 
-## Run it in one command
+**FALCON answers that question, then tells you what to do about it, and proves
+you did it.**
 
-Needs **Python 3.12+** and **Node.js 20.19+** (or 22.12+). The first run installs
-everything into the project folder, which takes a few minutes, once.
+---
+
+## ⚡ Run it in one command
+
+Needs **Python 3.12+** and **Node.js 20.19+** (or 22.12+). The first run
+installs everything into the project folder — a few minutes, once.
 
 ```powershell
 # Windows
@@ -59,41 +70,42 @@ cd FALCON
 sh scripts/start.sh
 ```
 
-The browser opens at <http://127.0.0.1:8600>. A fresh install starts as a
-working demonstration. FALCON creates the organisation *Example National
-Agency*, ten systems and an admin account, then scans the bundled sample
-estates with the real engine. About twenty seconds after start-up, every screen
-is populated.
+Your browser opens at <http://127.0.0.1:8600>. **A fresh install is not an
+empty one.** FALCON creates a demonstration agency with ten systems and an
+admin account, then scans the bundled sample estates with the real engine.
+About twenty seconds after start-up, every screen is full of real findings.
 
-| Sign in | |
-|---|---|
-| **Email** | `admin@falcon.local` |
-| **Password** | `Quantum-Safe-2026!` |
+<table>
+<tr><td><b>Email</b></td><td><code>admin@falcon.local</code></td></tr>
+<tr><td><b>Password</b></td><td><code>Quantum-Safe-2026!</code></td></tr>
+</table>
 
-The same sign-in is printed in the terminal. Change the password under
-*Settings → Password & devices*. To start empty with the setup assistant
-instead, add `-NoDemo` (Windows) or `--no-demo` (Linux/macOS).
+The same sign-in is printed in your terminal. Change it under *Settings →
+Password & devices*. To start empty with the setup assistant instead, add
+`-NoDemo` (Windows) or `--no-demo` (Linux/macOS).
 
 > **Already have a `data/` folder?** FALCON keeps it and does not create the
-> demonstration account, so sign in with the account you made. The terminal
+> demonstration account, so sign in with the account you made — the terminal
 > names it at start-up. To get the demonstration instead, stop FALCON, delete
 > the `data/` folder and start again.
 
 <details>
-<summary><b>Other ways to run FALCON</b>: Docker, the Windows desktop app, the CI command line</summary>
+<summary><b>Other ways to run it</b> — Docker, the Windows app, CI pipelines</summary>
 
-**Docker**: needs only Docker.
+<br>
+
+**Docker** (needs nothing but Docker):
 
 ```sh
 docker compose up -d        # http://localhost:8600, same demo and sign-in
 ```
 
 **Windows desktop app.** Download `FALCON_1.0.0_x64-setup.exe` from
-[Releases](https://github.com/shriomverma100/FALCON/releases). It is a per-user
-install with no administrator rights; you create your own account on first
-launch. To build it from source, run `scripts\build-desktop.ps1` (needs Rust).
+[Releases](https://github.com/shriomverma100/FALCON/releases). A per-user
+install, no administrator rights; you create your own account on first launch.
+Build it from source with `scripts\build-desktop.ps1` (needs Rust).
 
-**CI pipelines.** The same engine runs offline as a command line:
+**CI pipelines.** The same engine runs offline, with no server:
 
 ```sh
 falcon scan ./service --format sarif --output falcon.sarif --fail-on high
@@ -101,196 +113,298 @@ falcon scan . --format cyclonedx -o cbom.cdx.json --sign-key keys/attestation-ml
 falcon verify cbom.cdx.json.dsse.json --key keys/falcon-attestation.pub.pem
 ```
 
-See [docs/OPERATIONS.md](docs/OPERATIONS.md) for configuration, PostgreSQL, TLS,
-backups and GitHub Actions and GitLab CI examples.
+Configuration, PostgreSQL, TLS, backups and ready-made GitHub Actions and
+GitLab CI snippets are in [docs/OPERATIONS.md](docs/OPERATIONS.md).
+
 </details>
 
-## See it in action
+---
+
+## 🎬 See it working
 
 <p align="center">
   <a href="docs/media/falcon-tour.mp4">
     <picture>
       <source srcset="docs/media/falcon-tour.webp" type="image/webp">
-      <img src="docs/media/falcon-tour.gif" alt="FALCON tour: overview, quantum risk, the time machine, blast radius, exports, signed snapshots and dark mode" width="100%">
+      <img src="docs/media/falcon-tour.gif" alt="FALCON in use: quantum risk, the time machine, the migration plan and signed reports" width="100%">
     </picture>
   </a>
-  <br>
-  <a href="docs/media/falcon-tour.mp4"><b>▶ Watch the full 100-second tour (MP4)</b></a>
 </p>
 
-## What FALCON does
+<p align="center">
+  <a href="docs/media/falcon-tour.mp4"><b>▶︎ Watch the full 100-second tour</b></a>
+  &nbsp;·&nbsp;
+  <a href="docs/USER-GUIDE.md">Screen-by-screen guide</a>
+</p>
 
-FALCON works in four steps, each shown on its own screens.
+---
 
-### 1 · Discover: every algorithm, key, certificate, protocol, library, HSM and cloud key
+## 🔍 What FALCON does
+
+Four steps, each with its own screens.
+
+### 1 · Discover — every piece of cryptography, wherever it hides
 
 <img src="docs/media/scan.webp" alt="A finished scan: coverage treemap, stages and the artefacts found" width="100%">
 
-- **Sources:** folders, archives, Git repositories, container images (saved or
-  pulled from a registry) and live TLS endpoints. Each scan runs in an isolated
-  worker process with live progress over Server-Sent Events.
-- **Detectors:**
-  - a Python syntax-tree analyser, plus 259 rules for C/C++, C#, Go,
-    Java/Kotlin, JavaScript/TypeScript, PHP, Python, Ruby, Rust and Swift;
-  - manifests, lockfiles and OS package databases;
-  - ELF, PE and Mach-O binaries, and Java bytecode;
-  - certificates, keys and keystores;
-  - TLS, SSH and IPsec configuration;
-  - infrastructure-as-code KMS keys and HSMs.
-- **Post-quantum TLS probe:** a real TLS 1.3 handshake offering
-  X25519MLKEM768 with a genuine ML-KEM-768 key share. It shows whether each
-  endpoint already negotiates post-quantum key exchange.
-- **One inventory:** every finding maps to one catalogue of 85 algorithms and
-  76 libraries. Each is assessed twice, for classical strength and against a
-  quantum attacker, and de-duplicated by fingerprint across scans.
+<table>
+<tr><td width="50%" valign="top">
 
-### 2 · Assess: quantum risk by Mosca's inequality, per artefact
+**Where it looks**
 
-| | |
-|---|---|
-| <img src="docs/media/risk.webp" alt="Quantum Risk: risk posture, harvest-now-decrypt-later, planning horizon"> | <img src="docs/media/time-machine.webp" alt="Quantum Time Machine: the estate replayed year by year"> |
-| **Quantum Risk.** Score = impact × likelihood, where likelihood is the strongest of classical attack, P(CRQC within X + Y) and policy deadlines. Every score is explained. | **Time Machine.** Press play and watch the estate move from secure to at risk, exposed and broken, year by year to 2045. |
-| <img src="docs/media/risk-matrix.webp" alt="Risk matrix and Mosca plane"> | <img src="docs/media/compliance.webp" alt="Compliance against NIST IR 8547, SP 800-131A, CNSA 2.0 and the EU roadmap"> |
-| **Classification.** Type × lifetime and likelihood × impact matrices, and the Mosca plane (X against Y against the planning horizon Z). | **Compliance.** NIST IR 8547, NIST SP 800-131A, CNSA 2.0 and the EU PQC roadmap per artefact, with their dates and rules. |
+- Folders, archives (zip, tar, jar)
+- Git repositories
+- Container images — saved tarballs, OCI layouts, registry pulls
+- Live TLS endpoints
+- Cloud KMS and HSM definitions
 
-Harvest-now-decrypt-later is scored explicitly. Quantum-vulnerable key
-establishment on a reachable system whose data outlives the horizon is never
-rated below high. The mathematics is in
+</td><td width="50%" valign="top">
+
+**What it reads**
+
+- Source code: a Python syntax-tree analyser plus **259 rules** across 11 language packs
+- Dependency manifests, lockfiles, OS packages
+- ELF, PE and Mach-O binaries; Java bytecode
+- Certificates, keys and keystores
+- TLS, SSH and IPsec configuration
+
+</td></tr>
+</table>
+
+**A real post-quantum TLS probe.** FALCON builds its own TLS 1.3 ClientHello
+offering X25519MLKEM768 with a genuine ML-KEM-768 key share, so it can tell you
+which endpoints *already* negotiate post-quantum key exchange.
+
+Every finding maps to one catalogue of **85 algorithms** and **76 libraries**,
+is assessed twice (classical strength and against a quantum attacker), and is
+de-duplicated by a stable fingerprint so it keeps its identity across scans.
+
+### 2 · Assess — quantum risk, per artefact, with the reasoning shown
+
+<table>
+<tr>
+<td width="50%"><img src="docs/media/risk.webp" alt="Quantum Risk: posture, harvest-now-decrypt-later, planning horizon"></td>
+<td width="50%"><img src="docs/media/time-machine.webp" alt="The Quantum Time Machine replaying the estate year by year"></td>
+</tr>
+<tr>
+<td valign="top"><b>Quantum Risk.</b> Score = impact × likelihood, where likelihood is the strongest of: attackable classically today, P(quantum computer arrives within X + Y), and policy deadline pressure. Every score lists its drivers.</td>
+<td valign="top"><b>Time Machine.</b> Press play and watch the estate move from secure → at risk → exposed → broken, year by year to 2045, under your chosen threat model.</td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/media/risk-matrix.webp" alt="Risk matrix and Mosca plane"></td>
+<td width="50%"><img src="docs/media/compliance.webp" alt="Compliance against NIST, CNSA 2.0 and the EU roadmap"></td>
+</tr>
+<tr>
+<td valign="top"><b>Classification.</b> Type × lifetime and likelihood × impact matrices, plus the Mosca plane: every artefact at its data lifetime (X) against its migration effort (Y), with the horizon Z as the line.</td>
+<td valign="top"><b>Compliance.</b> NIST IR 8547, NIST SP 800-131A, CNSA 2.0 and the EU PQC roadmap, evaluated per artefact, today and at every future deadline.</td>
+</tr>
+</table>
+
+> **Harvest now, decrypt later** is scored explicitly. Quantum-vulnerable key
+> establishment on a reachable system, protecting data that outlives the
+> horizon, is *never* rated below high — because that traffic is already
+> compromised, whatever the calendar says.
+
+The complete mathematics, with every weight, is in
 [docs/METHODOLOGY.md](docs/METHODOLOGY.md).
 
-### 3 · Plan: post-quantum or hybrid replacements, sized and scheduled
+### 3 · Plan — what to replace it with, sized and scheduled
 
-| | |
-|---|---|
-| <img src="docs/media/artefact-recommendation.webp" alt="A recommendation: ML-DSA with a composite hybrid, overhead and latency"> | <img src="docs/media/migration.webp" alt="Migration plan: five waves on a per-system roadmap"> |
-| **Recommendations.** For each artefact: a primary replacement (ML-KEM, ML-DSA, SLH-DSA, AES-256-GCM, SHA-384, …), a hybrid for the transition (X25519MLKEM768, SecP384r1MLKEM1024, X-Wing, composite ML-DSA), the extra bytes on the wire, and the latency measured on this host. | **Migration plan.** Five waves (fix now, stop the harvest, long lead, before 2030, complete) on a per-system roadmap. It shows the completion date and the chance a quantum computer exists by then. |
-| <img src="docs/media/blast-radius.webp" alt="Blast radius: which systems share each algorithm, library, certificate and key"> | <img src="docs/media/lab.webp" alt="Benchmark lab: ML-KEM, ML-DSA and hybrids timed on this host"> |
-| **Blast radius.** Which systems share each algorithm, library, certificate and key, so shared cryptography is migrated once. | **Benchmark lab.** ML-KEM, ML-DSA, hybrid and classical algorithms timed on your own hardware; the recommendations use these numbers. |
+<table>
+<tr>
+<td width="50%"><img src="docs/media/artefact-recommendation.webp" alt="A recommendation with hybrid option, overhead and measured latency"></td>
+<td width="50%"><img src="docs/media/migration.webp" alt="Migration plan: five waves on a per-system roadmap"></td>
+</tr>
+<tr>
+<td valign="top"><b>Recommendations.</b> A primary replacement (ML-KEM, ML-DSA, SLH-DSA, AES-256-GCM, SHA-384…), a hybrid for the transition (X25519MLKEM768, SecP384r1MLKEM1024, X-Wing, composite ML-DSA), the extra bytes on the wire, and the latency <i>measured on your hardware</i>.</td>
+<td valign="top"><b>Migration plan.</b> Five waves — fix now, stop the harvest, long lead, before 2030, complete — scheduled per system, with a completion date and the probability a quantum computer exists by then.</td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/media/blast-radius.webp" alt="Blast radius of shared cryptography"></td>
+<td width="50%"><img src="docs/media/lab.webp" alt="Benchmark lab timing ML-KEM and ML-DSA on this host"></td>
+</tr>
+<tr>
+<td valign="top"><b>Blast radius.</b> Which systems share each algorithm, library, certificate and key — so shared cryptography gets migrated once, not five times.</td>
+<td valign="top"><b>Benchmark lab.</b> ML-KEM, ML-DSA, hybrids and the classical algorithms they replace, timed on your own machine. The recommendations quote these numbers, not a vendor's.</td>
+</tr>
+</table>
 
-### 4 · Prove: standard reports and post-quantum-signed evidence
+### 4 · Prove — evidence a third party can verify
 
-| | |
-|---|---|
-| <img src="docs/media/reports.webp" alt="Reports: CycloneDX, SARIF, SPDX, CSV and JSON exports; signed snapshots"> | <img src="docs/media/brief.webp" alt="Executive brief: a one-page summary for leadership"> |
-| **Reports.** CycloneDX 1.6 CBOM (JSON and XML), SARIF 2.1.0, SPDX 2.3, CSV and JSON, each validated against its official schema. Snapshots are signed with **ML-DSA-65** (FIPS 204) in a DSSE envelope, and drift is tracked between them. | **Executive brief.** The position in one document for leadership: risk, the systems most at risk, compliance, the roadmap and what to act on first. Prints to A4. |
+<table>
+<tr>
+<td width="50%"><img src="docs/media/reports.webp" alt="Reports: exports, signed snapshots, drift and verification"></td>
+<td width="50%"><img src="docs/media/brief.webp" alt="The executive brief, printable as A4"></td>
+</tr>
+<tr>
+<td valign="top"><b>Reports.</b> CycloneDX 1.6 CBOM (JSON and XML), SARIF 2.1.0, SPDX 2.3, CSV and JSON — each validated against its official schema. Snapshots are signed with <b>ML-DSA-65</b> (FIPS 204) in a DSSE envelope, with drift tracked between them.</td>
+<td valign="top"><b>Executive brief.</b> The whole position on one document for a board or a ministry: risk, systems most at risk, compliance, the roadmap, and what to act on first. Prints to A4.</td>
+</tr>
+</table>
 
-Anyone can verify a FALCON snapshot with stock OpenSSL 3.5, without FALCON. See
-[docs/REPORTING.md](docs/REPORTING.md).
+**Anyone can verify a FALCON snapshot with stock OpenSSL 3.5 — without
+FALCON.** The recipe is in [docs/REPORTING.md](docs/REPORTING.md) and is tested
+in a clean container on every release.
 
-## How FALCON meets problem statement 26164
+---
 
-| The problem statement asks for | FALCON delivers | Where to see it |
+## 🎯 How FALCON answers problem statement 26164
+
+| The problem statement asks for | FALCON delivers | Where to look |
 |---|---|---|
-| A catalogue of algorithms, keys, certificates, protocols, libraries, hardware and cloud services | Seven artefact classes, de-duplicated by fingerprint, with evidence (file, line, detector, confidence) and links between them | Inventory, artefact pages |
-| Scanning of source code, binaries, libraries and containers | Folders, archives, Git, container images (saved or registry), live TLS endpoints; 7 detector families plus 259 rules in 11 packs | Systems → *Add source*, Scans |
-| Quantum risk assessment | Impact × likelihood (classical, quantum, policy), with every driver explained; harvest-now-decrypt-later | Quantum Risk, artefact risk card |
-| Classification by type, lifetime and criticality using Mosca's inequality | Mosca X, Y and Z per artefact and system; type × lifetime and likelihood × impact matrices; the Mosca plane; the Time Machine | Quantum Risk, Time Machine, Threat Horizon |
-| PQC or hybrid recommendations | Primary, hybrid and alternatives with FIPS sizes and on-host latency; waves, roadmap, blast radius, what-if | Artefact pages, Migration Plan, Blast Radius, What-if, Benchmark Lab |
-| CBOM and standard report formats | CycloneDX 1.6 CBOM (JSON and XML), SARIF 2.1.0, SPDX 2.3, CSV, JSON; ML-DSA-signed snapshots; drift; executive brief | Reports, Executive Brief, `falcon scan` |
-| An interactive GUI | A web console, a Windows desktop app, and light, dark and phone layouts, with a chart for every view and a table twin for every chart | Everywhere |
+| Catalogue algorithms, keys, certificates, protocols, libraries, hardware and cloud services | Seven artefact classes, de-duplicated by fingerprint, with evidence (file, line, detector, confidence) and links between them | Inventory, artefact pages |
+| Scan source code, binaries, libraries and containers | Folders, archives, Git, container images, live endpoints; 7 detector families and 259 rules across 11 packs, in isolated workers | Systems → *Add source*, Scans |
+| Quantum risk assessment | Impact × likelihood (classical, quantum, policy), every driver explained; harvest-now-decrypt-later scored separately | Quantum Risk, artefact risk card |
+| Classify by type, lifetime and criticality using Mosca's inequality | Mosca X, Y and Z per artefact *and* per system; matrices; the Mosca plane; the Time Machine | Quantum Risk, Time Machine, Threat Horizon |
+| Recommend PQC or hybrid replacements | Primary, hybrid and alternatives with FIPS sizes and on-host latency; waves, roadmap, blast radius, what-if | Artefact pages, Migration Plan, Blast Radius, Benchmark Lab |
+| CBOM and standard report formats | CycloneDX 1.6 (JSON/XML), SARIF 2.1.0, SPDX 2.3, CSV, JSON; ML-DSA-signed snapshots; drift; executive brief | Reports, Executive Brief, `falcon scan` |
+| An interactive GUI | A web console and a native Windows app; light, dark and phone layouts; a chart for every view and a table twin for every chart | Everywhere |
 
-The full requirement-by-requirement evidence, the technical approach,
-feasibility and impact are in the
-[SIH submission document](docs/SIH-SUBMISSION.md).
+📄 **The full submission** — problem, solution, technical approach, feasibility,
+impact, requirement-by-requirement evidence and references — is in
+**[docs/SIH-SUBMISSION.md](docs/SIH-SUBMISSION.md)**.
 
-## Built for real use
+---
 
-- **Secure by design:**
-  - Argon2id passwords, lockout and rate limits; session cookies protected
-    against cross-site requests.
-  - Role-based access with explicit permissions.
-  - A SHA-256 hash-chained audit ledger records every change, export and
-    signature.
-  - A strict Content Security Policy.
-  - Secrets found in code are masked before they leave the scan worker.
-- **Air-gapped:** no outbound calls; fonts, knowledge bases and rule packs are
-  bundled.
-- **Tested:**
-  - 325 server tests, and every API test runs on a fresh database built
-    by the real migrations.
-  - Exports are validated against the official CycloneDX, SARIF and SPDX
-    schemas, and signatures are cross-checked with OpenSSL.
-  - Tests run on Windows and Linux. See [docs/TESTING.md](docs/TESTING.md).
-- **A console people enjoy using:**
-  - Apple-style glass, light and dark, seven accent colours, *Reduce
-    transparency*.
-  - Every page's code is prefetched when idle, so navigation paints in about
-    40 ms. A small falcon flies across the screen while anything loads.
-  - Quiet interface sounds, rebindable keyboard shortcuts (`?` lists them),
-    a `Ctrl/⌘ K` command palette.
+## 🛡️ Built for real deployment
+
+<table>
+<tr><td width="33%" valign="top">
+
+**Secure by design**
+
+- Argon2id passwords, lockout, rate limits
+- Six roles, explicit permissions
+- SHA-256 hash-chained audit ledger
+- Strict Content Security Policy
+- Secrets masked before they leave the scan worker
+
+</td><td width="33%" valign="top">
+
+**Air-gap first**
+
+- No outbound calls, ever
+- Fonts, knowledge bases and rule packs bundled
+- Scans isolated in separate processes
+- Runs on-premises, in a container, or on one laptop
+
+</td><td width="33%" valign="top">
+
+**Proven**
+
+- 326 server tests, Windows and Linux
+- API tests build their database from the real migrations
+- Exports validated against official schemas
+- Signatures cross-checked with OpenSSL
+
+</td></tr>
+</table>
+
+### A console people actually enjoy
+
+Apple-style glass in light and dark, seven accent colours, and *Reduce
+transparency* for those who want it. Every page's code is prefetched when the
+console is idle, so navigation paints in about **40 ms**. A small falcon flies
+across the screen while anything loads. Quiet interface sounds, rebindable
+keyboard shortcuts (press `?`), and a `Ctrl/⌘ K` command palette.
 
 <p align="center">
   <img src="docs/media/dark-overview.webp" alt="Overview in dark mode" width="49%">
   <img src="docs/media/dark-blast-radius.webp" alt="Blast radius in dark mode" width="49%">
 </p>
 <p align="center">
-  <img src="docs/media/palette.webp" alt="Command palette" width="49%">
+  <img src="docs/media/palette.webp" alt="The command palette" width="49%">
   <img src="docs/media/loader.webp" alt="The flying falcon loading indicator" width="49%">
 </p>
 
-## Architecture
+---
+
+## 🏗️ Architecture
 
 ```mermaid
 flowchart LR
-  subgraph Sources
-    A[Source code] --- B[Binaries & libraries] --- C[Container images] --- D[Certificates & keys] --- E[TLS endpoints] --- F[Cloud KMS & HSM]
+  subgraph S[" Sources "]
+    direction TB
+    A[Source code]
+    B[Binaries & libraries]
+    C[Container images]
+    D[Certificates & keys]
+    E[TLS endpoints]
+    F[Cloud KMS & HSM]
   end
-  Sources --> W[Isolated scan worker<br/>acquire → walk → detect]
-  W -- findings --> I[(Inventory<br/>artefacts · evidence · links)]
-  I --> R[Risk model<br/>Mosca X+Y>Z · HNDL · NIST/CNSA/EU]
-  R --> P[Migration planner<br/>PQC & hybrid · waves · blast radius]
-  I --> X[Reporting<br/>CycloneDX · SARIF · SPDX · CSV]
-  X --> S[ML-DSA-65 signed snapshots<br/>DSSE · in-toto]
-  R --> UI[Console · Desktop app]
+  S --> W["Isolated scan worker<br/>acquire → walk → detect"]
+  W -- findings --> I[("Inventory<br/>artefacts · evidence · links")]
+  I --> R["Risk model<br/>Mosca X+Y>Z · HNDL<br/>NIST · CNSA · EU"]
+  R --> P["Migration planner<br/>PQC & hybrid · waves<br/>blast radius"]
+  I --> X["Reporting<br/>CycloneDX · SARIF<br/>SPDX · CSV"]
+  X --> G["ML-DSA-65 signed snapshots<br/>DSSE · in-toto"]
+  R --> UI["Console · Desktop app"]
   P --> UI
-  S --> UI
+  G --> UI
 ```
 
-**Stack:**
-
-- **Server:** Python 3.12+, FastAPI, SQLAlchemy 2 and Alembic, with SQLite or
-  PostgreSQL.
-- **Cryptography:** pyca/cryptography, for ML-KEM, ML-DSA and the classical
-  algorithms.
-- **Console:** React 19, TypeScript, Vite, Tailwind 4, Radix, Motion, and d3
-  for the chart math.
-- **Desktop:** Tauri 2 (Rust).
-
-The details are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
-
-## Documentation
-
-| Document | For |
+| Layer | Built with |
 |---|---|
-| [SIH submission](docs/SIH-SUBMISSION.md) | The problem, the proposed solution, technical approach, feasibility, impact, and requirement-by-requirement evidence |
-| [User guide](docs/USER-GUIDE.md) | A screen-by-screen walkthrough, and a five-minute demo script |
-| [Risk methodology](docs/METHODOLOGY.md) | The threat horizon, Mosca per artefact, scoring, HNDL, compliance and waves, with every weight |
-| [Reporting](docs/REPORTING.md) | CBOM mapping, SARIF rules, signed snapshots, verification with OpenSSL, drift, export locations |
-| [Architecture](docs/ARCHITECTURE.md) | Components, pipeline, data model and repository layout |
-| [API](docs/API.md) | REST API overview and authentication; the full OpenAPI description |
-| [Operations](docs/OPERATIONS.md) | Installation, configuration, Docker, backup, security posture, CLI and CI |
-| [Testing](docs/TESTING.md) | How FALCON is verified, and how to run the checks |
-| [Roadmap](docs/ROADMAP.md) | What was delivered in each of the five phases |
+| **Server** | Python 3.12+, FastAPI, SQLAlchemy 2, Alembic · SQLite or PostgreSQL |
+| **Cryptography** | pyca/cryptography on OpenSSL 3.5 — ML-KEM, ML-DSA and the classical algorithms |
+| **Console** | React 19, TypeScript, Vite, Tailwind 4, Radix, Motion · d3 for chart maths |
+| **Desktop** | Tauri 2 (Rust), engine bundled with PyInstaller |
 
-## Repository layout
+Full detail in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+---
+
+## 📚 Documentation
+
+| Document | What it covers |
+|---|---|
+| **[SIH submission](docs/SIH-SUBMISSION.md)** | Problem, solution, technical approach, feasibility, impact, requirement evidence, references |
+| **[User guide](docs/USER-GUIDE.md)** | Screen by screen, with a five-minute evaluation script |
+| [Risk methodology](docs/METHODOLOGY.md) | Threat horizon, Mosca per artefact, scoring, HNDL, compliance and waves — every weight |
+| [Reporting](docs/REPORTING.md) | CBOM mapping, SARIF rules, signed snapshots, OpenSSL verification, drift |
+| [Architecture](docs/ARCHITECTURE.md) | Components, pipeline, data model, repository layout |
+| [API](docs/API.md) | 85 REST endpoints, authentication, examples; full OpenAPI description |
+| [Operations](docs/OPERATIONS.md) | Install, configure, Docker, backup, security posture, CLI and CI |
+| [Testing](docs/TESTING.md) | How FALCON is verified, and how to run the checks yourself |
+| [Changelog](CHANGELOG.md) · [Roadmap](docs/ROADMAP.md) | What shipped, and what each phase delivered |
+
+---
+
+## 🗂️ Repository layout
 
 ```
-server/      FastAPI service, discovery engine, risk model, migration planner, reporting, CLI (Python)
+server/      FastAPI service · discovery engine · risk model · migration planner · reporting · CLI
 console/     the web console (React, TypeScript)
-desktop/     the Windows desktop app (Tauri 2, Rust) and the bundled engine build
-fixtures/    sample estates, a container image and PKI material for the demo and tests
+desktop/     the Windows app (Tauri 2, Rust) and the bundled engine build
+fixtures/    synthetic sample estates, a container image and PKI material
 docs/        documentation and media
 scripts/     setup, start, development and desktop build scripts
 ```
 
-## Development
+## 🧑‍💻 Development
 
 ```sh
-scripts/dev.ps1                                   # API with auto-reload + console with hot reload (Windows)
-cd server  && .venv/Scripts/python -m pytest      # server tests (use .venv/bin/python on Linux/macOS)
+scripts/dev.ps1                                   # API with auto-reload + console with hot reload
+cd server  && .venv/Scripts/python -m pytest      # 326 tests (.venv/bin/python on Linux/macOS)
 cd console && npx tsc -b && npx vitest run && npm run build
 ```
 
-## Licence
+Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and our
+[Code of Conduct](CODE_OF_CONDUCT.md). For vulnerabilities, please read
+[SECURITY.md](SECURITY.md) first.
 
-[MIT](LICENSE) © 2026 Shriom Verma.
+---
+
+## 👥 Team
+
+Built by **Team THETA172** for Smart India Hackathon, problem statement
+**26164** — *Enterprise Cryptographic Discovery & Analysis Tool*, set by the
+**National Technical Research Organisation**.
+
+## 📄 Licence
+
+[MIT](LICENSE) © 2026 Team THETA172.
+
+<p align="center">
+  <sub>Harvest now, decrypt later is not a future problem. It started the day someone pressed record.</sub>
+</p>
