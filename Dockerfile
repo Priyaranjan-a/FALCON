@@ -10,7 +10,7 @@
 # X25519MLKEM768 group and the platform's own ML-KEM/ML-DSA code runs natively.
 
 # ---------------------------------------------------------------- console
-FROM node:22-alpine AS console
+FROM node:26-alpine AS console
 WORKDIR /build
 COPY console/package.json console/package-lock.json ./
 RUN npm ci --no-audit --no-fund
@@ -18,7 +18,7 @@ COPY console/ ./
 RUN npm run build
 
 # ------------------------------------------------------------------ server
-FROM python:3.13-slim-trixie AS runtime
+FROM python:3.14-slim-trixie AS runtime
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
