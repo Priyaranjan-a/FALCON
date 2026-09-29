@@ -13,7 +13,7 @@ dependencies = [
     "pydantic>=2.7",
     "pydantic-settings>=2.3",
     "argon2-cffi>=23.1",
-    "cryptography>=50",  # ML-KEM (FIPS 203) and ML-DSA (FIPS 204) primitives
+    "cryptography>=50",        # ML-KEM (FIPS 203) and ML-DSA (FIPS 204) primitives
     "python-multipart>=0.0.9",
     "pefile>=2023.2.7",
     "pyelftools>=0.31",
@@ -24,7 +24,7 @@ falcon = "falcon.__main__:main"
 
 [project.optional-dependencies]
 postgres = ["psycopg[binary]>=3.1"]
-dev = ["pytest>=8", "httpx2"]
+dev = ["pytest>=8", "httpx"]
 desktop = ["pyinstaller>=6.10"]
 
 [build-system]
@@ -35,7 +35,13 @@ build-backend = "setuptools.build_meta"
 include = ["falcon*"]
 
 [tool.setuptools.package-data]
-falcon = ["knowledge/*.json", "knowledge/rules/*.json", "migrations/*.py", "migrations/*.mako", "migrations/versions/*.py"]
+falcon = [
+    "knowledge/*.json",
+    "knowledge/rules/*.json",
+    "migrations/*.py",
+    "migrations/*.mako",
+    "migrations/versions/*.py",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
