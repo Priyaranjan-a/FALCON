@@ -1,0 +1,329 @@
+{
+ "pack": "javascript",
+ "version": "2026.09",
+ "prefilter": [
+  "crypto",
+  "createHash",
+  "createCipher",
+  "createHmac",
+  "createSign",
+  "generateKeyPair",
+  "subtle",
+  "forge",
+  "CryptoJS",
+  "jwt",
+  "jose",
+  "algorithm",
+  "noble",
+  "nacl",
+  "elliptic",
+  "bcrypt",
+  "argon2",
+  "tls",
+  "ciphers",
+  "minVersion",
+  "secureProtocol",
+  "ml_kem",
+  "ml_dsa",
+  "Math\\.random",
+  "openpgp",
+  "pbkdf2",
+  "scrypt"
+ ],
+ "rules": [
+  {
+   "id": "js.cipheriv",
+   "pattern": "create(?:De)?[Cc]ipher(?:iv)?\\(\\s*[\"\\'](?P<name>[\\w-]+)[\"\\']",
+   "grammar": "cipher",
+   "confidence": 0.95,
+   "function": "encrypt",
+   "library": "node:crypto"
+  },
+  {
+   "id": "js.hash",
+   "pattern": "createHash\\(\\s*[\"\\'](?P<name>[\\w-]+)[\"\\']",
+   "grammar": "hash",
+   "confidence": 0.95,
+   "function": "digest",
+   "library": "node:crypto"
+  },
+  {
+   "id": "js.hmac",
+   "pattern": "createHmac\\(\\s*[\"\\'](?P<name>[\\w-]+)[\"\\']",
+   "grammar": "mac",
+   "confidence": 0.95,
+   "function": "mac",
+   "library": "node:crypto"
+  },
+  {
+   "id": "js.sign",
+   "pattern": "create(?:Sign|Verify)\\(\\s*[\"\\'](?P<name>[\\w-]+)[\"\\']",
+   "grammar": "signature-or-hash",
+   "confidence": 0.93,
+   "function": "sign",
+   "library": "node:crypto"
+  },
+  {
+   "id": "js.keypair",
+   "pattern": "generateKeyPair(?:Sync)?\\(\\s*[\"\\'](?P<name>rsa-pss|rsa|ec|ed25519|ed448|x25519|x448|dsa|dh)[\"\\']",
+   "grammar": "key-type",
+   "confidence": 0.95,
+   "function": "keygen",
+   "library": "node:crypto",
+   "lookahead": "modulusLength\\s*:\\s*(?P<bits>\\d{3,5})|namedCurve\\s*:\\s*[\"\\'](?P<curve>[\\w-]+)[\"\\']",
+   "lookahead_lines": 4
+  },
+  {
+   "id": "js.webcrypto",
+   "pattern": "name\\s*:\\s*[\"\\'](?P<name>RSA-OAEP|RSASSA-PKCS1-v1_5|RSA-PSS|ECDSA|ECDH|AES-GCM|AES-CBC|AES-CTR|AES-KW|HMAC|PBKDF2|HKDF|Ed25519|X25519)[\"\\']",
+   "grammar": "webcrypto",
+   "confidence": 0.9,
+   "function": "crypto",
+   "library": "WebCrypto",
+   "lookahead": "modulusLength\\s*:\\s*(?P<bits>\\d{3,5})|namedCurve\\s*:\\s*[\"\\'](?P<curve>[\\w-]+)[\"\\']|length\\s*:\\s*(?P<bits_alt>128|192|256)|hash\\s*:\\s*[\"\\'](?P<hash>SHA-\\d+)[\"\\']",
+   "lookahead_lines": 3
+  },
+  {
+   "id": "js.pbkdf2",
+   "pattern": "pbkdf2(?:Sync)?\\(",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "function": "derive",
+   "algorithm": "PBKDF2",
+   "library": "node:crypto",
+   "lookahead": "[\"\\'](?P<hash>sha\\d+|md5)[\"\\']",
+   "lookahead_lines": 2
+  },
+  {
+   "id": "js.scrypt",
+   "pattern": "\\bscrypt(?:Sync)?\\(",
+   "grammar": "fixed",
+   "confidence": 0.8,
+   "function": "derive",
+   "algorithm": "scrypt",
+   "library": "node:crypto"
+  },
+  {
+   "id": "js.random",
+   "pattern": "randomBytes\\(|getRandomValues\\(|randomUUID\\(|randomInt\\(",
+   "grammar": "random",
+   "confidence": 0.8,
+   "function": "random",
+   "algorithm": "CSPRNG",
+   "library": "node:crypto"
+  },
+  {
+   "id": "js.insecure-random",
+   "pattern": "(?i)(?:token|secret|password|salt|nonce|otp|session|key)\\w*\\s*[:=][^\\n]*Math\\.random\\(",
+   "grammar": "random",
+   "confidence": 0.75,
+   "function": "random",
+   "algorithm": "Insecure PRNG",
+   "note": "Math.random is predictable; use crypto.randomBytes or getRandomValues"
+  },
+  {
+   "id": "js.tls-minversion",
+   "pattern": "(?:minVersion|maxVersion)\\s*:\\s*[\"\\'](?P<name>TLSv1(?:\\.[0-3])?)[\"\\']",
+   "grammar": "tls-version",
+   "confidence": 0.9,
+   "library": "node:tls"
+  },
+  {
+   "id": "js.tls-secureprotocol",
+   "pattern": "secureProtocol\\s*:\\s*[\"\\'](?P<name>\\w+)[\"\\']",
+   "grammar": "tls-version",
+   "confidence": 0.9,
+   "library": "node:tls"
+  },
+  {
+   "id": "js.tls-ciphers",
+   "pattern": "ciphers\\s*:\\s*[\"\\'](?P<name>[^\"\\']{6,})[\"\\']",
+   "grammar": "openssl-cipher-list",
+   "confidence": 0.85,
+   "function": "tls",
+   "library": "node:tls"
+  },
+  {
+   "id": "js.tls-curves",
+   "pattern": "ecdhCurve\\s*:\\s*[\"\\'](?P<name>[^\"\\']+)[\"\\']",
+   "grammar": "tls-group-list",
+   "confidence": 0.88,
+   "function": "key-agree",
+   "library": "node:tls"
+  },
+  {
+   "id": "js.jwt-alg",
+   "pattern": "algorithm\\s*:\\s*[\"\\'](?P<name>(?:HS|RS|ES|PS)\\d{3}K?|EdDSA)[\"\\']",
+   "grammar": "jose",
+   "confidence": 0.9,
+   "function": "sign",
+   "library": "JWT"
+  },
+  {
+   "id": "js.jwt-algs",
+   "pattern": "algorithms\\s*:\\s*\\[(?P<name>[^\\]]+)\\]",
+   "grammar": "jose-list",
+   "confidence": 0.88,
+   "function": "verify",
+   "library": "JWT"
+  },
+  {
+   "id": "js.jose-header",
+   "pattern": "\\balg\\s*:\\s*[\"\\'](?P<name>(?:HS|RS|ES|PS)\\d{3}K?|EdDSA|RSA-OAEP(?:-256)?|ECDH-ES(?:\\+A\\d{3}KW)?|A\\d{3}(?:GCM|KW))[\"\\']",
+   "grammar": "jose",
+   "confidence": 0.88,
+   "function": "sign",
+   "library": "jose"
+  },
+  {
+   "id": "js.forge-rsa",
+   "pattern": "rsa\\.generateKeyPair\\(\\s*(?:\\{\\s*bits\\s*:\\s*)?(?P<bits>\\d{3,5})",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "node-forge"
+  },
+  {
+   "id": "js.forge-md",
+   "pattern": "forge\\.md\\.(?P<name>md5|sha1|sha256|sha384|sha512)\\b",
+   "grammar": "hash",
+   "confidence": 0.93,
+   "function": "digest",
+   "library": "node-forge"
+  },
+  {
+   "id": "js.forge-cipher",
+   "pattern": "forge\\.cipher\\.create(?:De)?cipher\\(\\s*[\"\\'](?P<name>[\\w-]+)[\"\\']",
+   "grammar": "cipher",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "library": "node-forge"
+  },
+  {
+   "id": "js.cryptojs-cipher",
+   "pattern": "CryptoJS\\.(?P<name>AES|DES|TripleDES|RC4|Rabbit)\\.(?:en|de)crypt",
+   "grammar": "any",
+   "confidence": 0.92,
+   "function": "encrypt",
+   "library": "crypto-js"
+  },
+  {
+   "id": "js.cryptojs-hash",
+   "pattern": "CryptoJS\\.(?P<name>MD5|SHA1|SHA224|SHA256|SHA384|SHA512|SHA3|RIPEMD160)\\(",
+   "grammar": "hash",
+   "confidence": 0.92,
+   "function": "digest",
+   "library": "crypto-js"
+  },
+  {
+   "id": "js.cryptojs-hmac",
+   "pattern": "CryptoJS\\.Hmac(?P<name>MD5|SHA1|SHA256|SHA384|SHA512)\\(",
+   "grammar": "mac",
+   "confidence": 0.92,
+   "function": "mac",
+   "library": "crypto-js"
+  },
+  {
+   "id": "js.noble-mlkem",
+   "pattern": "ml_kem(?P<bits>512|768|1024)\\b",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "kem",
+   "algorithm": "ML-KEM",
+   "library": "@noble/post-quantum"
+  },
+  {
+   "id": "js.noble-mldsa",
+   "pattern": "ml_dsa(?P<bits>44|65|87)\\b",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "sign",
+   "algorithm": "ML-DSA",
+   "library": "@noble/post-quantum"
+  },
+  {
+   "id": "js.noble-slhdsa",
+   "pattern": "slh_dsa_(?:sha2|shake)_(?:128|192|256)[sf]\\b",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "sign",
+   "algorithm": "SLH-DSA",
+   "library": "@noble/post-quantum"
+  },
+  {
+   "id": "js.noble-curves",
+   "pattern": "@noble/curves/(?P<name>secp256k1|ed25519|ed448|p256|p384|p521|nist)",
+   "grammar": "curve",
+   "confidence": 0.85,
+   "function": "sign",
+   "algorithm": "ECDSA",
+   "library": "@noble/curves"
+  },
+  {
+   "id": "js.nacl-box",
+   "pattern": "nacl\\.box\\b",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "key-agree",
+   "algorithm": "X25519",
+   "library": "tweetnacl"
+  },
+  {
+   "id": "js.nacl-secretbox",
+   "pattern": "nacl\\.(?:secret)?box\\b",
+   "grammar": "fixed",
+   "confidence": 0.88,
+   "function": "encrypt",
+   "algorithm": "XSalsa20-Poly1305",
+   "library": "tweetnacl"
+  },
+  {
+   "id": "js.nacl-sign",
+   "pattern": "nacl\\.sign\\b",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "sign",
+   "algorithm": "EdDSA",
+   "parameter": "Ed25519",
+   "library": "tweetnacl"
+  },
+  {
+   "id": "js.elliptic",
+   "pattern": "new\\s+(?:EC|ec|elliptic\\.ec)\\(\\s*[\"\\'](?P<name>\\w+)[\"\\']",
+   "grammar": "curve",
+   "confidence": 0.9,
+   "function": "sign",
+   "algorithm": "ECDSA",
+   "library": "elliptic"
+  },
+  {
+   "id": "js.bcrypt",
+   "pattern": "bcrypt(?:js)?\\.(?:hash|hashSync|genSalt|compare)",
+   "grammar": "fixed",
+   "confidence": 0.88,
+   "function": "derive",
+   "algorithm": "bcrypt",
+   "library": "bcrypt"
+  },
+  {
+   "id": "js.argon2",
+   "pattern": "argon2\\.(?:hash|verify)\\(",
+   "grammar": "fixed",
+   "confidence": 0.88,
+   "function": "derive",
+   "algorithm": "Argon2",
+   "library": "argon2"
+  },
+  {
+   "id": "js.openpgp",
+   "pattern": "openpgp\\.generateKey\\(",
+   "grammar": "fixed",
+   "confidence": 0.8,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "OpenPGP.js",
+   "lookahead": "rsaBits\\s*:\\s*(?P<bits>\\d{3,5})"
+  }
+ ]
+}

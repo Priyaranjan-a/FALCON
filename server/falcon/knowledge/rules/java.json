@@ -1,0 +1,339 @@
+{
+ "pack": "java",
+ "version": "2026.09",
+ "prefilter": [
+  "getInstance",
+  "Cipher",
+  "KeyPair",
+  "Signature",
+  "MessageDigest",
+  "Mac",
+  "KeyAgreement",
+  "SSLContext",
+  "SecureRandom",
+  "DigestUtils",
+  "Hashing",
+  "bouncycastle",
+  "Jwts",
+  "JWSAlgorithm",
+  "Algorithm\\.",
+  "KeyProperties",
+  "AndroidKeyStore",
+  "MLKEM",
+  "MLDSA",
+  "Kyber",
+  "Dilithium",
+  "ECGenParameterSpec",
+  "setEnabledProtocols",
+  "setEnabledCipherSuites",
+  "new Random",
+  "KeyStore"
+ ],
+ "rules": [
+  {
+   "id": "java.cipher",
+   "pattern": "Cipher\\.getInstance\\(\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "jca-cipher",
+   "confidence": 0.97,
+   "function": "encrypt",
+   "library": "JCA"
+  },
+  {
+   "id": "java.keypairgen",
+   "pattern": "KeyPairGenerator\\.getInstance\\(\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "key-type",
+   "confidence": 0.95,
+   "function": "keygen",
+   "library": "JCA",
+   "lookahead": "\\.initialize\\(\\s*(?P<bits>\\d{3,5})|RSAKeyGenParameterSpec\\(\\s*(?P<bits_alt>\\d{3,5})|ECGenParameterSpec\\(\\s*\"(?P<curve>[^\"]+)\"|NamedParameterSpec\\.(?P<curve_alt>X25519|X448|ED25519|ED448)",
+   "lookahead_lines": 8
+  },
+  {
+   "id": "java.signature",
+   "pattern": "Signature\\.getInstance\\(\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "signature",
+   "confidence": 0.96,
+   "function": "sign",
+   "library": "JCA"
+  },
+  {
+   "id": "java.digest",
+   "pattern": "MessageDigest\\.getInstance\\(\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "hash",
+   "confidence": 0.96,
+   "function": "digest",
+   "library": "JCA"
+  },
+  {
+   "id": "java.mac",
+   "pattern": "Mac\\.getInstance\\(\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "mac",
+   "confidence": 0.95,
+   "function": "mac",
+   "library": "JCA"
+  },
+  {
+   "id": "java.keyagreement",
+   "pattern": "KeyAgreement\\.getInstance\\(\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "key-type",
+   "confidence": 0.95,
+   "function": "key-agree",
+   "library": "JCA"
+  },
+  {
+   "id": "java.secretkeyfactory",
+   "pattern": "SecretKeyFactory\\.getInstance\\(\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "pbe",
+   "confidence": 0.93,
+   "function": "derive",
+   "library": "JCA"
+  },
+  {
+   "id": "java.keygenerator",
+   "pattern": "KeyGenerator\\.getInstance\\(\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "any",
+   "confidence": 0.93,
+   "function": "keygen",
+   "library": "JCA",
+   "lookahead": "\\.init\\(\\s*(?P<bits>128|192|256)"
+  },
+  {
+   "id": "java.securerandom",
+   "pattern": "SecureRandom\\.getInstance(?:Strong)?\\(|new\\s+SecureRandom\\(",
+   "grammar": "random",
+   "confidence": 0.85,
+   "function": "random",
+   "algorithm": "CSPRNG",
+   "library": "JCA"
+  },
+  {
+   "id": "java.insecure-random",
+   "pattern": "(?i)(?:token|secret|password|salt|nonce|otp|session|key)\\w*\\s*=\\s*new\\s+(?:java\\.util\\.)?Random\\(",
+   "grammar": "random",
+   "confidence": 0.75,
+   "function": "random",
+   "algorithm": "Insecure PRNG",
+   "note": "java.util.Random is predictable; use SecureRandom for security values"
+  },
+  {
+   "id": "java.sslcontext",
+   "pattern": "SSLContext\\.getInstance\\(\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "tls-version",
+   "confidence": 0.9,
+   "library": "JSSE"
+  },
+  {
+   "id": "java.enabled-protocols",
+   "pattern": "setEnabledProtocols\\((?P<name>[^)]*)\\)",
+   "grammar": "tls-version-list",
+   "confidence": 0.9,
+   "library": "JSSE"
+  },
+  {
+   "id": "java.ec-spec",
+   "pattern": "ECGenParameterSpec\\(\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "curve",
+   "confidence": 0.9,
+   "function": "keygen",
+   "algorithm": "ECDSA",
+   "library": "JCA"
+  },
+  {
+   "id": "java.pbekeyspec",
+   "pattern": "new\\s+PBEKeySpec\\(",
+   "grammar": "fixed",
+   "confidence": 0.7,
+   "function": "derive",
+   "algorithm": "PBKDF2",
+   "library": "JCA",
+   "lookahead": "\"PBKDF2WithHmac(?P<hash>SHA\\d+)\""
+  },
+  {
+   "id": "java.commons-digest",
+   "pattern": "DigestUtils\\.(?P<name>md5|sha1|sha256|sha384|sha512|sha)(?:Hex)?\\(",
+   "grammar": "hash",
+   "confidence": 0.9,
+   "function": "digest",
+   "library": "Apache Commons Codec"
+  },
+  {
+   "id": "java.guava-hash",
+   "pattern": "Hashing\\.(?P<name>md5|sha1|sha256|sha384|sha512)\\(\\)",
+   "grammar": "hash",
+   "confidence": 0.9,
+   "function": "digest",
+   "library": "Guava"
+  },
+  {
+   "id": "java.jjwt",
+   "pattern": "SignatureAlgorithm\\.(?P<name>HS\\d{3}|RS\\d{3}|ES\\d{3}|PS\\d{3})\\b",
+   "grammar": "jose",
+   "confidence": 0.9,
+   "function": "sign",
+   "library": "JJWT"
+  },
+  {
+   "id": "java.jjwt-new",
+   "pattern": "Jwts\\.SIG\\.(?P<name>HS\\d{3}|RS\\d{3}|ES\\d{3}|PS\\d{3}|EdDSA)\\b",
+   "grammar": "jose",
+   "confidence": 0.92,
+   "function": "sign",
+   "library": "JJWT"
+  },
+  {
+   "id": "java.nimbus",
+   "pattern": "JWSAlgorithm\\.(?P<name>HS\\d{3}|RS\\d{3}|ES\\d{3}K?|PS\\d{3}|EdDSA|Ed25519)\\b",
+   "grammar": "jose",
+   "confidence": 0.92,
+   "function": "sign",
+   "library": "Nimbus JOSE"
+  },
+  {
+   "id": "java.nimbus-jwe",
+   "pattern": "JWEAlgorithm\\.(?P<name>RSA_OAEP_256|RSA_OAEP|RSA1_5|ECDH_ES|A\\d{3}KW)\\b",
+   "grammar": "jose",
+   "confidence": 0.9,
+   "function": "encrypt",
+   "library": "Nimbus JOSE"
+  },
+  {
+   "id": "java.auth0-hmac",
+   "pattern": "Algorithm\\.HMAC(?P<shabits>256|384|512)\\(",
+   "grammar": "fixed",
+   "confidence": 0.92,
+   "function": "mac",
+   "algorithm": "HMAC",
+   "library": "Auth0 java-jwt"
+  },
+  {
+   "id": "java.auth0-rsa",
+   "pattern": "Algorithm\\.RSA(?P<shabits>256|384|512)\\(",
+   "grammar": "fixed",
+   "confidence": 0.92,
+   "function": "sign",
+   "algorithm": "RSA",
+   "library": "Auth0 java-jwt"
+  },
+  {
+   "id": "java.auth0-ecdsa",
+   "pattern": "Algorithm\\.ECDSA(?P<shabits>256|384|512)\\(",
+   "grammar": "fixed",
+   "confidence": 0.92,
+   "function": "sign",
+   "algorithm": "ECDSA",
+   "library": "Auth0 java-jwt"
+  },
+  {
+   "id": "java.android-keyprops",
+   "pattern": "KeyProperties\\.KEY_ALGORITHM_(?P<name>RSA|EC|AES|HMAC_SHA256|HMAC_SHA384|HMAC_SHA512|3DES)\\b",
+   "grammar": "any",
+   "confidence": 0.88,
+   "function": "keygen",
+   "library": "Android Keystore"
+  },
+  {
+   "id": "java.bc-mlkem",
+   "pattern": "MLKEMParameters\\.ml_kem_(?P<bits>512|768|1024)|MLKEMParameterSpec\\.ml_kem_(?P<bits_alt>512|768|1024)",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "kem",
+   "algorithm": "ML-KEM",
+   "library": "Bouncy Castle"
+  },
+  {
+   "id": "java.bc-mldsa",
+   "pattern": "MLDSAParameters\\.ml_dsa_(?P<bits>44|65|87)|MLDSAParameterSpec\\.ml_dsa_(?P<bits_alt>44|65|87)",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "sign",
+   "algorithm": "ML-DSA",
+   "library": "Bouncy Castle"
+  },
+  {
+   "id": "java.bc-kyber",
+   "pattern": "KyberParameters\\.kyber(?P<bits>512|768|1024)|KyberParameterSpec\\.kyber(?P<bits_alt>512|768|1024)",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "kem",
+   "algorithm": "Kyber",
+   "library": "Bouncy Castle"
+  },
+  {
+   "id": "java.bc-dilithium",
+   "pattern": "DilithiumParameters\\.dilithium(?P<bits>[235])|DilithiumParameterSpec\\.dilithium(?P<bits_alt>[235])",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "sign",
+   "algorithm": "Dilithium",
+   "library": "Bouncy Castle"
+  },
+  {
+   "id": "java.bc-slhdsa",
+   "pattern": "SLHDSAParameters\\.(?P<name>\\w+)|SPHINCSPlusParameters\\.(?P<name_alt>\\w+)",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "sign",
+   "algorithm": "SLH-DSA",
+   "library": "Bouncy Castle"
+  },
+  {
+   "id": "java.bc-falcon",
+   "pattern": "FalconParameters\\.falcon_(?P<bits>512|1024)",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "sign",
+   "algorithm": "Falcon",
+   "library": "Bouncy Castle"
+  },
+  {
+   "id": "java.pkcs11-keystore",
+   "pattern": "KeyStore\\.getInstance\\(\\s*\"PKCS11\"",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "kind": "hardware",
+   "attrs": {
+    "type": "hsm",
+    "interface": "PKCS#11",
+    "label": "PKCS#11 hardware keystore"
+   }
+  },
+  {
+   "id": "java.android-keystore",
+   "pattern": "\"AndroidKeyStore\"",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "kind": "hardware",
+   "attrs": {
+    "type": "secure-element",
+    "interface": "Android Keystore",
+    "vendor": "Android Keystore",
+    "label": "Android Keystore"
+   }
+  },
+  {
+   "id": "java.strongbox",
+   "pattern": "setIsStrongBoxBacked\\(\\s*true",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "kind": "hardware",
+   "attrs": {
+    "type": "secure-element",
+    "interface": "Android Keystore",
+    "vendor": "Android StrongBox",
+    "label": "Android StrongBox secure element"
+   }
+  },
+  {
+   "id": "java.sunpkcs11",
+   "pattern": "new\\s+SunPKCS11\\(|\"SunPKCS11\"",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "kind": "hardware",
+   "attrs": {
+    "type": "hsm",
+    "interface": "PKCS#11",
+    "label": "SunPKCS11 provider"
+   }
+  }
+ ]
+}

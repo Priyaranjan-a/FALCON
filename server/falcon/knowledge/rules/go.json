@@ -1,0 +1,307 @@
+{
+ "pack": "go",
+ "version": "2026.09",
+ "prefilter": [
+  "crypto/",
+  "rsa\\.",
+  "ecdsa\\.",
+  "ecdh\\.",
+  "ed25519",
+  "aes\\.",
+  "des\\.",
+  "rc4\\.",
+  "md5\\.",
+  "sha1\\.",
+  "sha256",
+  "sha512",
+  "hmac\\.",
+  "tls\\.",
+  "x509\\.",
+  "mlkem",
+  "circl",
+  "pbkdf2",
+  "bcrypt",
+  "argon2",
+  "scrypt",
+  "chacha20",
+  "nacl"
+ ],
+ "rules": [
+  {
+   "id": "go.rsa-keygen",
+   "pattern": "rsa\\.GenerateKey\\([^,]+,\\s*(?P<bits>\\d{3,5})",
+   "grammar": "fixed",
+   "confidence": 0.97,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "crypto/rsa"
+  },
+  {
+   "id": "go.rsa-sign-pkcs1",
+   "pattern": "rsa\\.(?:Sign|Verify)PKCS1v15\\(",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "sign",
+   "algorithm": "RSA",
+   "padding": "PKCS1v15",
+   "library": "crypto/rsa",
+   "lookahead": "crypto\\.SHA(?P<shabits>\\d+)",
+   "lookahead_lines": 0
+  },
+  {
+   "id": "go.rsa-pss",
+   "pattern": "rsa\\.(?:Sign|Verify)PSS\\(",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "sign",
+   "algorithm": "RSA",
+   "padding": "PSS",
+   "library": "crypto/rsa",
+   "lookahead": "crypto\\.SHA(?P<shabits>\\d+)",
+   "lookahead_lines": 0
+  },
+  {
+   "id": "go.rsa-oaep",
+   "pattern": "rsa\\.(?:Encrypt|Decrypt)OAEP\\(",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "RSA",
+   "padding": "OAEP",
+   "library": "crypto/rsa",
+   "lookahead": "sha(?P<shabits>\\d+)\\.New",
+   "lookahead_lines": 0
+  },
+  {
+   "id": "go.rsa-pkcs1-enc",
+   "pattern": "rsa\\.(?:Encrypt|Decrypt)PKCS1v15\\(",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "RSA",
+   "padding": "PKCS1v15",
+   "library": "crypto/rsa"
+  },
+  {
+   "id": "go.elliptic",
+   "pattern": "elliptic\\.(?P<name>P224|P256|P384|P521)\\(\\)",
+   "grammar": "curve",
+   "confidence": 0.93,
+   "function": "keygen",
+   "algorithm": "ECDSA",
+   "library": "crypto/elliptic"
+  },
+  {
+   "id": "go.ecdh",
+   "pattern": "ecdh\\.(?P<name>P256|P384|P521|X25519)\\(\\)",
+   "grammar": "curve",
+   "confidence": 0.95,
+   "function": "key-agree",
+   "algorithm": "ECDH",
+   "library": "crypto/ecdh"
+  },
+  {
+   "id": "go.ed25519",
+   "pattern": "ed25519\\.(?:GenerateKey|Sign|Verify|NewKeyFromSeed)\\(",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "sign",
+   "algorithm": "EdDSA",
+   "parameter": "Ed25519",
+   "library": "crypto/ed25519"
+  },
+  {
+   "id": "go.aes",
+   "pattern": "aes\\.NewCipher\\(",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "function": "encrypt",
+   "algorithm": "AES",
+   "library": "crypto/aes",
+   "lookahead": "cipher\\.New(?P<mode>GCM|CBCEncrypter|CBCDecrypter|CTR|CFBEncrypter|CFBDecrypter|OFB)",
+   "lookahead_lines": 6
+  },
+  {
+   "id": "go.des",
+   "pattern": "des\\.NewCipher\\(",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "encrypt",
+   "algorithm": "DES",
+   "library": "crypto/des"
+  },
+  {
+   "id": "go.3des",
+   "pattern": "des\\.NewTripleDESCipher\\(",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "encrypt",
+   "algorithm": "3DES",
+   "library": "crypto/des"
+  },
+  {
+   "id": "go.rc4",
+   "pattern": "rc4\\.NewCipher\\(",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "encrypt",
+   "algorithm": "RC4",
+   "library": "crypto/rc4"
+  },
+  {
+   "id": "go.chacha",
+   "pattern": "chacha20poly1305\\.New(?:X)?\\(",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "encrypt",
+   "algorithm": "ChaCha20-Poly1305",
+   "parameter": "256",
+   "library": "x/crypto"
+  },
+  {
+   "id": "go.hash",
+   "pattern": "\\b(?P<name>md5|sha1|sha256|sha512)\\.(?:New|Sum)(?:224|256|384)?\\(",
+   "grammar": "hash",
+   "confidence": 0.9,
+   "function": "digest",
+   "library": "crypto"
+  },
+  {
+   "id": "go.sha384",
+   "pattern": "sha512\\.(?:New384|Sum384)\\(",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "digest",
+   "algorithm": "SHA-384",
+   "library": "crypto/sha512"
+  },
+  {
+   "id": "go.sha3",
+   "pattern": "sha3\\.(?:New|Sum)(?P<bits>224|256|384|512)\\(",
+   "grammar": "hash",
+   "confidence": 0.93,
+   "function": "digest",
+   "library": "crypto/sha3"
+  },
+  {
+   "id": "go.hmac",
+   "pattern": "hmac\\.New\\(\\s*(?P<name>md5|sha1|sha256|sha512)\\.New",
+   "grammar": "mac",
+   "confidence": 0.93,
+   "function": "mac",
+   "library": "crypto/hmac"
+  },
+  {
+   "id": "go.pbkdf2",
+   "pattern": "pbkdf2\\.Key\\(",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "derive",
+   "algorithm": "PBKDF2",
+   "library": "pbkdf2",
+   "lookahead": "(?P<hash>sha1|sha256|sha512)\\.New",
+   "lookahead_lines": 0
+  },
+  {
+   "id": "go.bcrypt",
+   "pattern": "bcrypt\\.GenerateFromPassword\\(",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "derive",
+   "algorithm": "bcrypt",
+   "library": "x/crypto/bcrypt"
+  },
+  {
+   "id": "go.argon2",
+   "pattern": "argon2\\.I?DKey\\(",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "derive",
+   "algorithm": "Argon2",
+   "library": "x/crypto/argon2"
+  },
+  {
+   "id": "go.scrypt",
+   "pattern": "scrypt\\.Key\\(",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "derive",
+   "algorithm": "scrypt",
+   "library": "x/crypto/scrypt"
+  },
+  {
+   "id": "go.hkdf",
+   "pattern": "hkdf\\.(?:New|Key|Extract)\\(\\s*(?P<hash>sha1|sha256|sha512)\\.New",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "derive",
+   "algorithm": "HKDF",
+   "library": "hkdf"
+  },
+  {
+   "id": "go.tls-version",
+   "pattern": "tls\\.(?P<name>VersionTLS1[0-3]|VersionSSL30)\\b",
+   "grammar": "tls-version",
+   "confidence": 0.93,
+   "library": "crypto/tls"
+  },
+  {
+   "id": "go.tls-suite",
+   "pattern": "tls\\.(?P<name>TLS_[A-Z0-9_]+)\\b",
+   "grammar": "tls-suite",
+   "confidence": 0.93,
+   "function": "tls",
+   "library": "crypto/tls"
+  },
+  {
+   "id": "go.tls-group",
+   "pattern": "tls\\.(?P<name>X25519MLKEM768|SecP256r1MLKEM768|SecP384r1MLKEM1024|X25519|CurveP256|CurveP384|CurveP521)\\b",
+   "grammar": "tls-group",
+   "confidence": 0.93,
+   "function": "key-agree",
+   "library": "crypto/tls"
+  },
+  {
+   "id": "go.x509-sig",
+   "pattern": "x509\\.(?P<name>(?:MD5|SHA1|SHA256|SHA384|SHA512)WithRSA(?:PSS)?|ECDSAWithSHA\\d+|DSAWithSHA\\d+|PureEd25519)\\b",
+   "grammar": "signature",
+   "confidence": 0.9,
+   "function": "sign",
+   "library": "crypto/x509"
+  },
+  {
+   "id": "go.mlkem",
+   "pattern": "mlkem\\.GenerateKey(?P<bits>768|1024)\\(|mlkem\\.NewEncapsulationKey(?P<bits_alt>768|1024)\\(",
+   "grammar": "fixed",
+   "confidence": 0.96,
+   "function": "kem",
+   "algorithm": "ML-KEM",
+   "library": "crypto/mlkem"
+  },
+  {
+   "id": "go.circl-kem",
+   "pattern": "circl/kem/(?P<name>mlkem/mlkem\\d+|kyber/kyber\\d+|hybrid)",
+   "grammar": "pqc",
+   "confidence": 0.9,
+   "function": "kem",
+   "library": "CIRCL"
+  },
+  {
+   "id": "go.circl-sign",
+   "pattern": "circl/sign/(?P<name>mldsa/mldsa\\d+|dilithium/mode\\d|slhdsa|ed448|ed25519)",
+   "grammar": "any",
+   "confidence": 0.85,
+   "function": "sign",
+   "library": "CIRCL"
+  },
+  {
+   "id": "go.nacl-box",
+   "pattern": "box\\.(?:Seal|Open|GenerateKey)\\(",
+   "grammar": "fixed",
+   "confidence": 0.8,
+   "function": "key-agree",
+   "algorithm": "X25519",
+   "library": "x/crypto/nacl"
+  }
+ ]
+}

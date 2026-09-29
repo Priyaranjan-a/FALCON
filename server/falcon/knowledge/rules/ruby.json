@@ -1,0 +1,154 @@
+{
+ "pack": "ruby",
+ "version": "2026.09",
+ "prefilter": [
+  "OpenSSL",
+  "Digest",
+  "BCrypt",
+  "RbNaCl",
+  "JWT",
+  "SecureRandom",
+  "ssl_version",
+  "min_version",
+  "rand"
+ ],
+ "rules": [
+  {
+   "id": "rb.rsa",
+   "pattern": "OpenSSL::PKey::RSA\\.(?:new|generate)\\(\\s*(?P<bits>\\d{3,5})",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "openssl"
+  },
+  {
+   "id": "rb.ec",
+   "pattern": "OpenSSL::PKey::EC\\.(?:generate|new)\\(\\s*[\"\\'](?P<name>[\\w-]+)[\"\\']",
+   "grammar": "curve",
+   "confidence": 0.95,
+   "function": "keygen",
+   "algorithm": "ECDSA",
+   "library": "openssl"
+  },
+  {
+   "id": "rb.dsa",
+   "pattern": "OpenSSL::PKey::DSA\\.(?:new|generate)\\(\\s*(?P<bits>\\d{3,5})?",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "keygen",
+   "algorithm": "DSA",
+   "library": "openssl"
+  },
+  {
+   "id": "rb.dh",
+   "pattern": "OpenSSL::PKey::DH\\.(?:new|generate)\\(\\s*(?P<bits>\\d{3,5})?",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "key-agree",
+   "algorithm": "DH",
+   "library": "openssl"
+  },
+  {
+   "id": "rb.cipher",
+   "pattern": "OpenSSL::Cipher(?:::Cipher)?\\.new\\(\\s*[\"\\'](?P<name>[\\w-]+)[\"\\']",
+   "grammar": "cipher",
+   "confidence": 0.95,
+   "function": "encrypt",
+   "library": "openssl"
+  },
+  {
+   "id": "rb.cipher-class",
+   "pattern": "OpenSSL::Cipher::(?P<name>AES128|AES192|AES256|AES|DES|RC4|BF)\\.new",
+   "grammar": "cipher",
+   "confidence": 0.9,
+   "function": "encrypt",
+   "library": "openssl"
+  },
+  {
+   "id": "rb.digest",
+   "pattern": "\\bDigest::(?P<name>MD5|SHA1|SHA256|SHA384|SHA512|RMD160)\\b",
+   "grammar": "hash",
+   "confidence": 0.93,
+   "function": "digest",
+   "library": "digest"
+  },
+  {
+   "id": "rb.ossl-digest",
+   "pattern": "OpenSSL::Digest(?:::(?P<name>MD5|SHA1|SHA256|SHA384|SHA512)|\\.new\\(\\s*[\"\\'](?P<name_alt>[\\w-]+)[\"\\'])",
+   "grammar": "hash",
+   "confidence": 0.93,
+   "function": "digest",
+   "library": "openssl"
+  },
+  {
+   "id": "rb.hmac",
+   "pattern": "OpenSSL::HMAC\\.(?:hexdigest|digest)\\(\\s*[\"\\'](?P<name>[\\w-]+)[\"\\']",
+   "grammar": "mac",
+   "confidence": 0.93,
+   "function": "mac",
+   "library": "openssl"
+  },
+  {
+   "id": "rb.ssl-version",
+   "pattern": "(?:ssl_version|min_version|max_version)\\s*=\\s*(?::|OpenSSL::SSL::)?[\"\\']?(?P<name>\\w+)",
+   "grammar": "tls-version",
+   "confidence": 0.9,
+   "library": "openssl"
+  },
+  {
+   "id": "rb.bcrypt",
+   "pattern": "BCrypt::Password\\.create",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "derive",
+   "algorithm": "bcrypt",
+   "library": "bcrypt"
+  },
+  {
+   "id": "rb.rbnacl-box",
+   "pattern": "RbNaCl::Boxes::Curve25519XSalsa20Poly1305|RbNaCl::Box\\b",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "key-agree",
+   "algorithm": "X25519",
+   "library": "rbnacl"
+  },
+  {
+   "id": "rb.rbnacl-sign",
+   "pattern": "RbNaCl::Signatures::Ed25519|RbNaCl::SigningKey",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "sign",
+   "algorithm": "EdDSA",
+   "parameter": "Ed25519",
+   "library": "rbnacl"
+  },
+  {
+   "id": "rb.jwt",
+   "pattern": "JWT\\.(?:encode|decode)\\(.*[\"\\'](?P<name>(?:HS|RS|ES|PS)\\d{3}|EdDSA)[\"\\']",
+   "grammar": "jose",
+   "confidence": 0.9,
+   "function": "sign",
+   "library": "jwt"
+  },
+  {
+   "id": "rb.securerandom",
+   "pattern": "SecureRandom\\.(?:hex|uuid|random_bytes|base64|urlsafe_base64|alphanumeric)",
+   "grammar": "random",
+   "confidence": 0.85,
+   "function": "random",
+   "algorithm": "CSPRNG",
+   "library": "securerandom"
+  },
+  {
+   "id": "rb.insecure-random",
+   "pattern": "(?i)(?:token|secret|password|salt|nonce|otp|session|key)\\w*\\s*=[^\\n]*\\brand\\(",
+   "grammar": "random",
+   "confidence": 0.7,
+   "function": "random",
+   "algorithm": "Insecure PRNG",
+   "note": "Kernel#rand is predictable"
+  }
+ ]
+}

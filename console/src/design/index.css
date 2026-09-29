@@ -1,0 +1,585 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* Map tokens onto Tailwind utilities (bg-surface, text-label-2, border-separator…). */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-elevated: var(--elevated);
+  --color-label: var(--label);
+  --color-label-2: var(--label-2);
+  --color-label-3: var(--label-3);
+  --color-label-4: var(--label-4);
+  --color-separator: var(--separator);
+  --color-separator-strong: var(--separator-strong);
+  --color-fill: var(--fill);
+  --color-fill-2: var(--fill-2);
+  --color-fill-hover: var(--fill-hover);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-tint: var(--accent-tint);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-accent: var(--on-accent);
+  --color-danger: var(--danger);
+  --color-danger-tint: var(--danger-tint);
+  --color-danger-ink: var(--danger-ink);
+  --color-success-ink: var(--success-ink);
+  --color-warning-ink: var(--warning-ink);
+  --color-good: var(--status-good);
+  --color-warning: var(--status-warning);
+  --color-serious: var(--status-serious);
+  --color-critical: var(--status-critical);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter Variable", "Segoe UI", system-ui, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter Variable", "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono Variable", "Cascadia Code", Menlo, Consolas, monospace;
+
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
+
+  --shadow-card: var(--shadow-card);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-pop: var(--shadow-pop);
+  --shadow-thumb: var(--shadow-thumb);
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/*
+ * Type scale. Tracking tightens as size grows, the way optical sizing does on
+ * Apple platforms; figures stay proportional except where columns must align.
+ */
+@utility text-large-title {
+  font-family: var(--font-display);
+  font-size: 34px;
+  line-height: 41px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+}
+@utility text-title-1 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 700;
+  letter-spacing: -0.021em;
+}
+@utility text-title-2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: -0.019em;
+}
+@utility text-title-3 {
+  font-family: var(--font-display);
+  font-size: 19px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: -0.017em;
+}
+@utility text-headline {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+@utility text-body {
+  font-size: 15px;
+  line-height: 22px;
+  letter-spacing: -0.009em;
+}
+@utility text-callout {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.006em;
+}
+@utility text-subhead {
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: -0.003em;
+}
+@utility text-footnote {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+@utility text-caption {
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0.006em;
+}
+@utility text-hero {
+  font-family: var(--font-display);
+  font-size: 56px;
+  line-height: 60px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+@utility hairline-b {
+  box-shadow: inset 0 -0.5px 0 var(--separator);
+}
+@utility hairline-t {
+  box-shadow: inset 0 0.5px 0 var(--separator);
+}
+/* Standard property only: the build adds the -webkit- prefix for Safari. Declaring
+   both lets the minifier collapse them into the prefixed form, which Chromium ignores. */
+@utility vibrancy {
+  backdrop-filter: saturate(180%) blur(28px);
+}
+/* Glass: translucent material with a specular top edge. Top-level surfaces only;
+   never nest glass in glass (the blur would compound). */
+@utility glass {
+  background-color: var(--glass);
+  backdrop-filter: saturate(180%) blur(24px);
+  box-shadow: var(--shadow-glass);
+}
+@utility glass-strong {
+  background-color: var(--glass-strong);
+  backdrop-filter: saturate(190%) blur(34px);
+  box-shadow: var(--shadow-glass);
+}
+@utility focus-ring {
+  outline: none;
+  box-shadow: 0 0 0 3.5px var(--focus-ring);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-synthesis: none;
+    -webkit-text-size-adjust: 100%;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--backdrop);
+    background-attachment: fixed;
+    color: var(--label);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.006em;
+    overflow: hidden;
+  }
+  ::selection {
+    background: var(--accent-tint-hover);
+  }
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3.5px var(--focus-ring);
+    border-radius: 6px;
+  }
+  /* Everything that acts on a click says so under the pointer. */
+  button,
+  [role="button"],
+  [role="menuitem"],
+  [role="menuitemcheckbox"],
+  [role="menuitemradio"],
+  [role="option"],
+  [role="radio"],
+  [role="checkbox"],
+  [role="switch"],
+  [role="tab"],
+  [role="slider"],
+  a[href],
+  summary,
+  select,
+  label[for] {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:disabled,
+  [aria-disabled="true"],
+  [data-disabled] {
+    cursor: not-allowed;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+  }
+  svg text {
+    font-family: var(--font-sans);
+  }
+
+  /* Scrollbars that recede like macOS overlay scrollbars. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--fill-hover) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--fill-hover);
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline: 2px solid CanvasText;
+    }
+  }
+}
+
+/* Skeleton shimmer */
+@keyframes falcon-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Apple-style activity indicator: twelve spokes fading in sequence. */
+@keyframes falcon-spoke {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.15;
+  }
+}
+
+@keyframes falcon-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes falcon-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes falcon-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.985);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/*
+ * Reveal: a page's sections rise into place one after another, the way a
+ * macOS window's content settles. Only opacity and transform animate, so the
+ * compositor does the work and the main thread stays free (no layout, no
+ * paint per frame). The final keyframe is `transform: none`, so no lingering
+ * containing block traps fixed or sticky descendants.
+ */
+@keyframes falcon-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reveal > * {
+  --i: 7;
+  animation: falcon-rise 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* --reveal-base is inherited, so a nested sequence starts after its parent's. */
+  animation-delay: calc(var(--reveal-base, 0ms) + min(var(--i) * 42ms, 290ms));
+}
+.reveal > :nth-child(1) { --i: 0; }
+.reveal > :nth-child(2) { --i: 1; }
+.reveal > :nth-child(3) { --i: 2; }
+.reveal > :nth-child(4) { --i: 3; }
+.reveal > :nth-child(5) { --i: 4; }
+.reveal > :nth-child(6) { --i: 5; }
+.reveal > :nth-child(7) { --i: 6; }
+/* display: contents has no box to animate; its children carry the sequence. */
+.reveal > .contents {
+  animation: none;
+}
+
+/* Content replacing its skeleton fades in rather than popping. */
+.settle {
+  animation: falcon-fade 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal > *,
+  .settle {
+    animation: none;
+  }
+}
+
+/* The page scroller: smooth for in-page jumps, a stable gutter so content never shifts sideways. */
+#content {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+@media (prefers-reduced-motion: reduce) {
+  #content {
+    scroll-behavior: auto;
+  }
+}
+
+/* Applied for two frames while the appearance changes, so every surface switches together. */
+.appearance-switching,
+.appearance-switching * {
+  transition: none !important;
+}
+
+/*
+ * Pointer light: a soft glow that follows the pointer across an interactive
+ * surface, the way iPadOS and visionOS acknowledge what is under the pointer.
+ * PointerLight (design/pointer.ts) feeds --hx/--hy; the glow sits above the
+ * element's background and below its content.
+ */
+@layer components {
+  .hover-light {
+    position: relative;
+    isolation: isolate;
+  }
+  .hover-light::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(var(--hover-size, 140px) circle at var(--hx, 50%) var(--hy, 50%), var(--hover-light), transparent 72%);
+    opacity: 0;
+    transition: opacity 220ms ease;
+  }
+  .hover-light:hover::before {
+    opacity: 1;
+  }
+  .hover-light-accent {
+    --hover-light: var(--hover-light-accent);
+  }
+  /* Surfaces that open something lift slightly under the pointer. */
+  .hover-lift {
+    transition:
+      transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glass-hover);
+  }
+  .hover-lift:active {
+    transform: translateY(0) scale(0.99);
+    transition-duration: 90ms;
+  }
+  @media (hover: none), (prefers-reduced-motion: reduce) {
+    .hover-light::before {
+      display: none;
+    }
+    .hover-lift:hover {
+      transform: none;
+    }
+  }
+}
+
+/*
+ * Print: documents (the executive brief) print on white A4 with their status
+ * colours intact; application chrome and motion are dropped.
+ */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 14mm 16mm;
+  }
+  html,
+  body,
+  #root {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+  * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .brief {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .brief-paper {
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
+  .brief-section {
+    break-inside: avoid;
+  }
+  /* Long tables may continue on the next page, a whole row at a time, with the title kept on its content. */
+  .brief-flow h2,
+  .brief-flow p {
+    break-after: avoid;
+  }
+  .brief-flow tr {
+    break-inside: avoid;
+  }
+  .reveal > * {
+    animation: none !important;
+  }
+}
+
+/* The falcon: wings pivot at the shoulder; a down-beat folds them below the body. */
+.falcon-wing {
+  transform-box: view-box;
+  transform-origin: 34px 18.4px;
+  animation: falcon-flap 0.36s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  transition: transform 0.25s ease-out;
+}
+.falcon-wing-far {
+  animation-name: falcon-flap-far;
+  animation-delay: -0.05s;
+}
+.is-gliding .falcon-wing {
+  animation: none;
+  transform: scaleY(0.62);
+}
+@keyframes falcon-flap {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(-0.62);
+  }
+}
+@keyframes falcon-flap-far {
+  0%,
+  100% {
+    transform: scaleY(0.9);
+  }
+  50% {
+    transform: scaleY(-0.45);
+  }
+}
+.falcon-flyer {
+  filter: drop-shadow(0 6px 10px rgba(0, 40, 90, 0.22));
+}
+@media (prefers-reduced-motion: reduce) {
+  .falcon-wing {
+    animation: none;
+  }
+}
+
+/*
+ * Accent colour, chosen in Settings → Appearance, as on macOS. Each accent has
+ * light and dark values tuned for contrast with the text on filled buttons;
+ * tints and the focus ring derive from it. Charts keep their validated palette.
+ */
+:root[data-accent] {
+  --accent-tint: color-mix(in srgb, var(--accent) 11%, transparent);
+  --accent-tint-hover: color-mix(in srgb, var(--accent) 17%, transparent);
+  --focus-ring: color-mix(in srgb, var(--accent) 40%, transparent);
+  --hover-light: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+:root[data-accent="purple"] { --accent: #8944ab; --accent-hover: #9651b8; --accent-pressed: #7c3a9d; --accent-ink: #7d3aa0; }
+:root[data-accent="pink"] { --accent: #d12d5f; --accent-hover: #dc3a6b; --accent-pressed: #bd2554; --accent-ink: #c21f52; }
+:root[data-accent="red"] { --accent: #d70015; --accent-hover: #e0182a; --accent-pressed: #c20013; --accent-ink: #c40012; }
+:root[data-accent="orange"] { --accent: #c55300; --accent-hover: #d05f0a; --accent-pressed: #b24b00; --accent-ink: #b34a00; }
+:root[data-accent="green"] { --accent: #1f8a3b; --accent-hover: #25964a; --accent-pressed: #1a7a33; --accent-ink: #1b7d36; }
+:root[data-accent="graphite"] { --accent: #5f5f64; --accent-hover: #6e6e73; --accent-pressed: #525257; --accent-ink: #515156; }
+
+@media (prefers-color-scheme: dark) {
+  :root[data-accent="purple"]:not([data-theme="light"]) { --accent: #bf5af2; --accent-hover: #c86ff5; --accent-pressed: #a94ed8; --accent-ink: #d08ef7; }
+  :root[data-accent="pink"]:not([data-theme="light"]) { --accent: #ff375f; --accent-hover: #ff5577; --accent-pressed: #e62e53; --accent-ink: #ff6f8c; }
+  :root[data-accent="red"]:not([data-theme="light"]) { --accent: #ff453a; --accent-hover: #ff5f55; --accent-pressed: #e63d33; --accent-ink: #ff6961; }
+  :root[data-accent="orange"]:not([data-theme="light"]) { --accent: #ff9f0a; --accent-hover: #ffad33; --accent-pressed: #e68f09; --accent-ink: #ffb340; --on-accent: #1d1d1f; }
+  :root[data-accent="green"]:not([data-theme="light"]) { --accent: #30d158; --accent-hover: #4cd96f; --accent-pressed: #28b84c; --accent-ink: #52dd75; --on-accent: #06200d; }
+  :root[data-accent="graphite"]:not([data-theme="light"]) { --accent: #98989d; --accent-hover: #a8a8ad; --accent-pressed: #8a8a8f; --accent-ink: #b0b0b5; --on-accent: #111113; }
+}
+:root[data-theme="dark"][data-accent="purple"] { --accent: #bf5af2; --accent-hover: #c86ff5; --accent-pressed: #a94ed8; --accent-ink: #d08ef7; }
+:root[data-theme="dark"][data-accent="pink"] { --accent: #ff375f; --accent-hover: #ff5577; --accent-pressed: #e62e53; --accent-ink: #ff6f8c; }
+:root[data-theme="dark"][data-accent="red"] { --accent: #ff453a; --accent-hover: #ff5f55; --accent-pressed: #e63d33; --accent-ink: #ff6961; }
+:root[data-theme="dark"][data-accent="orange"] { --accent: #ff9f0a; --accent-hover: #ffad33; --accent-pressed: #e68f09; --accent-ink: #ffb340; --on-accent: #1d1d1f; }
+:root[data-theme="dark"][data-accent="green"] { --accent: #30d158; --accent-hover: #4cd96f; --accent-pressed: #28b84c; --accent-ink: #52dd75; --on-accent: #06200d; }
+:root[data-theme="dark"][data-accent="graphite"] { --accent: #98989d; --accent-hover: #a8a8ad; --accent-pressed: #8a8a8f; --accent-ink: #b0b0b5; --on-accent: #111113; }
+
+/* Reduce transparency (Settings → Appearance): glass becomes solid, nothing is blurred. */
+:root[data-transparency="reduced"] {
+  --glass: var(--surface);
+  --glass-strong: var(--surface);
+  --glass-header: var(--surface);
+  --toolbar: var(--surface);
+  --elevated: var(--surface);
+}
+:root[data-transparency="reduced"] .glass,
+:root[data-transparency="reduced"] .glass-strong,
+:root[data-transparency="reduced"] .vibrancy {
+  backdrop-filter: none;
+}
+
+/* Skip link: the first Tab on any page jumps straight to its content. */
+.skip-link {
+  position: fixed;
+  left: 12px;
+  top: -48px;
+  z-index: 80;
+  transition: top 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.skip-link:focus-visible {
+  top: 12px;
+}

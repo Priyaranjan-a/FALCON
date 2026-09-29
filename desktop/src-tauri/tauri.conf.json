@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "FALCON",
+  "version": "1.0.0",
+  "identifier": "in.falcon.desktop",
+  "build": {
+    "frontendDist": "../splash"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "splash",
+        "title": "FALCON",
+        "url": "index.html",
+        "width": 440,
+        "height": 320,
+        "resizable": false,
+        "maximizable": false,
+        "minimizable": false,
+        "decorations": false,
+        "shadow": true,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "publisher": "Shriom Verma",
+    "copyright": "Copyright © 2026 Shriom Verma. MIT License.",
+    "category": "DeveloperTool",
+    "shortDescription": "Enterprise cryptographic discovery and quantum-risk analysis",
+    "longDescription": "FALCON discovers the cryptography in source code, binaries, libraries, container images, certificates, keys, protocol configuration and live TLS endpoints, and assesses it against the quantum threat.",
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "resources": {
+      "../../server/dist/falcon-engine/": "engine/",
+      "../../console/dist/": "console/"
+    },
+    "windows": {
+      "nsis": {
+        "installMode": "currentUser",
+        "installerIcon": "icons/icon.ico"
+      },
+      "webviewInstallMode": { "type": "downloadBootstrapper" }
+    }
+  }
+}

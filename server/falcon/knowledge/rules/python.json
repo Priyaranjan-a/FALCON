@@ -1,0 +1,46 @@
+{
+ "pack": "python",
+ "version": "2026.09",
+ "prefilter": [
+  "ssl",
+  "TLSVersion",
+  "set_ciphers",
+  "oqs",
+  "PROTOCOL_",
+  "jwt",
+  "algorithm",
+  "Fernet"
+ ],
+ "rules": [
+  {
+   "id": "py.ssl-protocol",
+   "pattern": "ssl\\.(?P<name>PROTOCOL_(?:TLSv1(?:_[12])?|SSLv2|SSLv3|SSLv23))\\b",
+   "grammar": "tls-version",
+   "confidence": 0.9,
+   "library": "ssl"
+  },
+  {
+   "id": "py.tls-version",
+   "pattern": "TLSVersion\\.(?P<name>TLSv1(?:_[123])?|SSLv3)\\b",
+   "grammar": "tls-version",
+   "confidence": 0.93,
+   "library": "ssl"
+  },
+  {
+   "id": "py.set-ciphers",
+   "pattern": "set_ciphers\\(\\s*[\"\\'](?P<name>[^\"\\']+)[\"\\']",
+   "grammar": "openssl-cipher-list",
+   "confidence": 0.88,
+   "function": "tls",
+   "library": "ssl"
+  },
+  {
+   "id": "py.oqs",
+   "pattern": "oqs\\.(?:KeyEncapsulation|Signature)\\(\\s*[\"\\'](?P<name>[\\w+-]+)[\"\\']",
+   "grammar": "pqc",
+   "confidence": 0.96,
+   "function": "pqc",
+   "library": "liboqs-python"
+  }
+ ]
+}

@@ -1,0 +1,409 @@
+{
+ "pack": "c",
+ "version": "2026.09",
+ "prefilter": [
+  "EVP_",
+  "RSA_",
+  "EC_",
+  "SSL_",
+  "SHA",
+  "MD5",
+  "crypto_",
+  "mbedtls",
+  "wc_",
+  "BCRYPT",
+  "CALG_",
+  "OQS_",
+  "gcry_",
+  "gnutls",
+  "DES_",
+  "AES_",
+  "_method",
+  "Cryptoki",
+  "C_Initialize",
+  "tpm2",
+  "Tss2",
+  "Esys_"
+ ],
+ "rules": [
+  {
+   "id": "c.rsa-keygen",
+   "pattern": "RSA_generate_key(?:_ex)?\\([^,]*,\\s*(?P<bits>\\d{3,5})",
+   "grammar": "fixed",
+   "confidence": 0.96,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.rsa-keygen-bits",
+   "pattern": "EVP_PKEY_CTX_set_rsa_keygen_bits\\([^,]+,\\s*(?P<bits>\\d{3,5})",
+   "grammar": "fixed",
+   "confidence": 0.96,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.evp-rsa-gen",
+   "pattern": "EVP_RSA_gen\\(\\s*(?P<bits>\\d{3,5})",
+   "grammar": "fixed",
+   "confidence": 0.96,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "OpenSSL 3"
+  },
+  {
+   "id": "c.rsa-lowlevel",
+   "pattern": "\\bRSA_(?:sign|verify|public_encrypt|private_decrypt)\\(",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "function": "sign",
+   "algorithm": "RSA",
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.ec-curve",
+   "pattern": "EC_KEY_new_by_curve_name\\(\\s*(?P<name>NID_\\w+)|EVP_PKEY_CTX_set_ec_paramgen_curve_nid\\([^,]+,\\s*(?P<name_alt>NID_\\w+)",
+   "grammar": "curve",
+   "confidence": 0.95,
+   "function": "keygen",
+   "algorithm": "ECDSA",
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.evp-ec-gen",
+   "pattern": "EVP_EC_gen\\(\\s*\"(?P<name>[\\w-]+)\"",
+   "grammar": "curve",
+   "confidence": 0.95,
+   "function": "keygen",
+   "algorithm": "ECDSA",
+   "library": "OpenSSL 3"
+  },
+  {
+   "id": "c.evp-cipher",
+   "pattern": "EVP_(?P<name>aes_\\w+?|des_\\w+?|rc4\\w*|rc2_\\w+?|bf_\\w+?|cast5_\\w+?|idea_\\w+?|chacha20\\w*|camellia_\\w+?|sm4_\\w+?|aria_\\w+?|seed_\\w+?)\\(\\)",
+   "grammar": "evp",
+   "confidence": 0.95,
+   "function": "encrypt",
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.evp-digest",
+   "pattern": "EVP_(?P<name>md4|md5|sha1|sha224|sha256|sha384|sha512|sha512_256|sha3_224|sha3_256|sha3_384|sha3_512|blake2b512|blake2s256|ripemd160|sm3)\\(\\)",
+   "grammar": "evp",
+   "confidence": 0.95,
+   "function": "digest",
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.oneshot-hash",
+   "pattern": "\\b(?P<name>MD5|MD4|SHA1|SHA256|SHA384|SHA512)\\s*\\(\\s*\\(?(?:const\\s+)?(?:unsigned\\s+)?(?:char|uint8_t)?",
+   "grammar": "hash",
+   "confidence": 0.75,
+   "function": "digest",
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.evp-fetch",
+   "pattern": "EVP_(?:CIPHER|MD|MAC|KDF|SIGNATURE|KEM)_fetch\\([^,]*,\\s*\"(?P<name>[\\w/-]+)\"",
+   "grammar": "any",
+   "confidence": 0.92,
+   "function": "crypto",
+   "library": "OpenSSL 3"
+  },
+  {
+   "id": "c.evp-keygen-name",
+   "pattern": "EVP_PKEY_(?:Q_keygen|CTX_new_from_name)\\([^,]*,\\s*(?:[^,]*,\\s*)?\"(?P<name>[\\w-]+)\"",
+   "grammar": "any",
+   "confidence": 0.93,
+   "function": "keygen",
+   "library": "OpenSSL 3",
+   "lookahead": "\"(?P<bits>\\d{3,5})\"|,\\s*(?P<bits_alt>\\d{3,5})\\s*\\)",
+   "lookahead_lines": 0
+  },
+  {
+   "id": "c.evp-pkey-id",
+   "pattern": "EVP_PKEY_CTX_new_id\\(\\s*EVP_PKEY_(?P<name>RSA|EC|DH|DSA|ED25519|X25519|ED448|X448)\\b",
+   "grammar": "key-type",
+   "confidence": 0.93,
+   "function": "keygen",
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.ssl-method",
+   "pattern": "\\b(?P<name>SSLv2|SSLv3|TLSv1|TLSv1_1|TLSv1_2|DTLSv1|DTLSv1_2)_(?:client_|server_)?method\\(\\)",
+   "grammar": "tls-version",
+   "confidence": 0.95,
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.ssl-minproto",
+   "pattern": "SSL(?:_CTX)?_set_(?:min|max)_proto_version\\([^,]+,\\s*(?P<name>\\w+)\\s*\\)",
+   "grammar": "tls-version",
+   "confidence": 0.95,
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.ssl-ciphers",
+   "pattern": "SSL(?:_CTX)?_set_(?:cipher_list|ciphersuites)\\([^,]+,\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "openssl-cipher-list",
+   "confidence": 0.9,
+   "function": "tls",
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.ssl-groups",
+   "pattern": "SSL(?:_CTX)?_set1_(?:groups|curves)_list\\([^,]+,\\s*\"(?P<name>[^\"]+)\"",
+   "grammar": "tls-group-list",
+   "confidence": 0.93,
+   "function": "key-agree",
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.sodium-box",
+   "pattern": "\\bcrypto_box_(?:keypair|easy|seal|beforenm|detached)\\b",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "key-agree",
+   "algorithm": "X25519",
+   "library": "libsodium"
+  },
+  {
+   "id": "c.sodium-box-cipher",
+   "pattern": "\\bcrypto_box_(?:easy|seal|detached)\\b",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "encrypt",
+   "algorithm": "XSalsa20-Poly1305",
+   "library": "libsodium"
+  },
+  {
+   "id": "c.sodium-sign",
+   "pattern": "\\bcrypto_sign_(?:keypair|detached|verify_detached|seed_keypair)?\\b",
+   "grammar": "fixed",
+   "confidence": 0.92,
+   "function": "sign",
+   "algorithm": "EdDSA",
+   "parameter": "Ed25519",
+   "library": "libsodium"
+  },
+  {
+   "id": "c.sodium-secretbox",
+   "pattern": "\\bcrypto_secretbox_\\w+",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "XSalsa20-Poly1305",
+   "library": "libsodium"
+  },
+  {
+   "id": "c.sodium-aead-chacha",
+   "pattern": "\\bcrypto_aead_x?chacha20poly1305_\\w+",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "ChaCha20-Poly1305",
+   "parameter": "256",
+   "library": "libsodium"
+  },
+  {
+   "id": "c.sodium-aead-aes",
+   "pattern": "\\bcrypto_aead_aes256gcm_\\w+",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "AES",
+   "parameter": "256",
+   "mode": "GCM",
+   "library": "libsodium"
+  },
+  {
+   "id": "c.sodium-pwhash",
+   "pattern": "\\bcrypto_pwhash(?:_str)?\\b",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "derive",
+   "algorithm": "Argon2",
+   "library": "libsodium"
+  },
+  {
+   "id": "c.sodium-generichash",
+   "pattern": "\\bcrypto_generichash\\b",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "digest",
+   "algorithm": "BLAKE2b",
+   "library": "libsodium"
+  },
+  {
+   "id": "c.sodium-kx",
+   "pattern": "\\bcrypto_(?:kx_\\w+|scalarmult(?:_base)?)\\b",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "key-agree",
+   "algorithm": "X25519",
+   "library": "libsodium"
+  },
+  {
+   "id": "c.mbedtls-rsa",
+   "pattern": "mbedtls_rsa_gen_key\\([^,]+,[^,]+,[^,]+,\\s*(?P<bits>\\d{3,5})",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "Mbed TLS"
+  },
+  {
+   "id": "c.mbedtls-aes",
+   "pattern": "mbedtls_aes_setkey_(?:enc|dec)\\([^,]+,[^,]+,\\s*(?P<bits>128|192|256)",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "AES",
+   "library": "Mbed TLS"
+  },
+  {
+   "id": "c.mbedtls-ecp",
+   "pattern": "MBEDTLS_ECP_DP_(?P<name>SECP\\d+[RK]1|CURVE25519|CURVE448|BP\\d+R1)\\b",
+   "grammar": "curve",
+   "confidence": 0.9,
+   "function": "keygen",
+   "algorithm": "ECDSA",
+   "library": "Mbed TLS"
+  },
+  {
+   "id": "c.mbedtls-hash",
+   "pattern": "mbedtls_(?P<name>md5|sha1|sha256|sha512)_(?:starts|update|finish|init|ret)?",
+   "grammar": "hash",
+   "confidence": 0.85,
+   "function": "digest",
+   "library": "Mbed TLS"
+  },
+  {
+   "id": "c.mbedtls-des",
+   "pattern": "mbedtls_des3_",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "encrypt",
+   "algorithm": "3DES",
+   "library": "Mbed TLS"
+  },
+  {
+   "id": "c.wolf-rsa",
+   "pattern": "wc_MakeRsaKey\\([^,]+,\\s*(?P<bits>\\d{3,5})",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "wolfCrypt"
+  },
+  {
+   "id": "c.wolf-hash",
+   "pattern": "\\bwc_(?P<name>Md5|Sha|Sha256|Sha384|Sha512|Sha3_256)(?:Update|Final|Hash)\\b",
+   "grammar": "hash",
+   "confidence": 0.88,
+   "function": "digest",
+   "library": "wolfCrypt"
+  },
+  {
+   "id": "c.wolf-aes",
+   "pattern": "\\bwc_Aes(?P<mode>Gcm|Cbc|Ctr)?(?:SetKey|Encrypt|Decrypt)",
+   "grammar": "fixed",
+   "confidence": 0.88,
+   "function": "encrypt",
+   "algorithm": "AES",
+   "library": "wolfCrypt"
+  },
+  {
+   "id": "c.wolf-pqc",
+   "pattern": "\\bwc_(?P<name>MlKem|Kyber|MlDsa|Dilithium|Falcon|Sphincs)\\w*",
+   "grammar": "pqc",
+   "confidence": 0.88,
+   "function": "pqc",
+   "library": "wolfCrypt"
+  },
+  {
+   "id": "c.cng",
+   "pattern": "BCRYPT_(?P<name>RSA|DSA|DH|ECDSA_P256|ECDSA_P384|ECDSA_P521|ECDH_P256|ECDH_P384|ECDH_P521|ECDSA|ECDH|AES|3DES|3DES_112|DES|RC4|RC2|MD5|MD4|SHA1|SHA256|SHA384|SHA512|MLKEM|MLDSA|PBKDF2|RNG)_ALGORITHM\\b",
+   "grammar": "cng",
+   "confidence": 0.93,
+   "function": "crypto",
+   "library": "Windows CNG"
+  },
+  {
+   "id": "c.capi",
+   "pattern": "\\bCALG_(?P<name>MD5|MD4|SHA1|SHA|SHA_256|SHA_384|SHA_512|3DES|3DES_112|DES|RC4|RC2|AES_128|AES_192|AES_256|AES|RSA_SIGN|RSA_KEYX|DH_EPHEM|DH_SF|ECDSA|ECDH|DSS_SIGN)\\b",
+   "grammar": "capi",
+   "confidence": 0.93,
+   "function": "crypto",
+   "library": "Windows CryptoAPI"
+  },
+  {
+   "id": "c.oqs-kem",
+   "pattern": "OQS_KEM_alg_(?P<name>\\w+)",
+   "grammar": "pqc",
+   "confidence": 0.96,
+   "function": "kem",
+   "library": "liboqs"
+  },
+  {
+   "id": "c.oqs-sig",
+   "pattern": "OQS_SIG_alg_(?P<name>\\w+)",
+   "grammar": "pqc",
+   "confidence": 0.96,
+   "function": "sign",
+   "library": "liboqs"
+  },
+  {
+   "id": "c.gcrypt-cipher",
+   "pattern": "GCRY_CIPHER_(?P<name>AES256|AES192|AES128|AES|3DES|DES|ARCFOUR|BLOWFISH|CHACHA20|CAMELLIA\\d+)\\b",
+   "grammar": "cipher",
+   "confidence": 0.9,
+   "function": "encrypt",
+   "library": "libgcrypt"
+  },
+  {
+   "id": "c.gcrypt-md",
+   "pattern": "GCRY_MD_(?P<name>MD5|SHA1|SHA256|SHA384|SHA512|SHA3_256|BLAKE2B_512)\\b",
+   "grammar": "hash",
+   "confidence": 0.9,
+   "function": "digest",
+   "library": "libgcrypt"
+  },
+  {
+   "id": "c.lowlevel-des",
+   "pattern": "\\bDES_(?:ecb|ncbc|ede3_cbc)_encrypt\\(",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "encrypt",
+   "algorithm": "DES",
+   "library": "OpenSSL"
+  },
+  {
+   "id": "c.pkcs11-init",
+   "pattern": "\\bC_Initialize\\(|\\bC_GetFunctionList\\(",
+   "grammar": "fixed",
+   "confidence": 0.8,
+   "kind": "hardware",
+   "attrs": {
+    "type": "hsm",
+    "interface": "PKCS#11",
+    "label": "PKCS#11 token (Cryptoki)"
+   }
+  },
+  {
+   "id": "c.tpm2",
+   "pattern": "\\b(?:Esys_\\w+|Tss2_\\w+|TPM2_ALG_\\w+)",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "kind": "hardware",
+   "attrs": {
+    "type": "tpm",
+    "interface": "TSS 2.0",
+    "vendor": "TPM 2.0",
+    "label": "Trusted Platform Module 2.0"
+   }
+  }
+ ]
+}

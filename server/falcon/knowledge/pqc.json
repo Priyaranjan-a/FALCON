@@ -1,0 +1,44 @@
+{
+  "version": "2026.09",
+  "note": "Post-quantum and hybrid replacements FALCON recommends, with the sizes their standards define (bytes). Categories are NIST PQC security categories (1 ~ AES-128, 3 ~ AES-192, 5 ~ AES-256).",
+  "algorithms": {
+    "ML-KEM-768": { "family": "ML-KEM", "kind": "kem", "standard": "FIPS 203", "category": 3, "public_key": 1184, "secret_key": 2400, "ciphertext": 1088, "summary": "Module-lattice key encapsulation; the general-purpose default." },
+    "ML-KEM-1024": { "family": "ML-KEM", "kind": "kem", "standard": "FIPS 203", "category": 5, "public_key": 1568, "secret_key": 3168, "ciphertext": 1568, "summary": "Highest ML-KEM parameter set; required by CNSA 2.0." },
+    "X25519MLKEM768": { "family": "hybrid", "kind": "kem", "standard": "IETF hybrid TLS key exchange", "category": 3, "public_key": 1216, "ciphertext": 1120, "summary": "X25519 and ML-KEM-768 combined: secure if either holds. The default in current browsers, OpenSSL 3.5 and Go 1.24." },
+    "SecP384r1MLKEM1024": { "family": "hybrid", "kind": "kem", "standard": "IETF hybrid TLS key exchange", "category": 5, "public_key": 1665, "ciphertext": 1665, "summary": "P-384 and ML-KEM-1024 combined, for high-assurance and CNSA-aligned systems." },
+    "X-Wing": { "family": "hybrid", "kind": "kem", "standard": "IETF draft (X25519 + ML-KEM-768)", "category": 3, "public_key": 1216, "ciphertext": 1120, "summary": "A general-purpose hybrid KEM for applications and HPKE." },
+    "mlkem768x25519-sha256": { "family": "hybrid", "kind": "kem", "standard": "OpenSSH 10 default", "category": 3, "public_key": 1216, "ciphertext": 1120, "summary": "Hybrid ML-KEM key exchange for SSH." },
+    "IKEv2 + ML-KEM-768 (RFC 9370)": { "family": "hybrid", "kind": "kem", "standard": "RFC 9370 multiple key exchanges", "category": 3, "public_key": 1184, "ciphertext": 1088, "summary": "An additional ML-KEM exchange in IKEv2, keeping the classical one." },
+    "ML-DSA-44": { "family": "ML-DSA", "kind": "signature", "standard": "FIPS 204", "category": 2, "public_key": 1312, "secret_key": 2560, "signature": 2420, "summary": "Smallest ML-DSA; for constrained, lower-assurance uses." },
+    "ML-DSA-65": { "family": "ML-DSA", "kind": "signature", "standard": "FIPS 204", "category": 3, "public_key": 1952, "secret_key": 4032, "signature": 3309, "summary": "Module-lattice signatures; the general-purpose default." },
+    "ML-DSA-87": { "family": "ML-DSA", "kind": "signature", "standard": "FIPS 204", "category": 5, "public_key": 2592, "secret_key": 4896, "signature": 4627, "summary": "Highest ML-DSA parameter set; required by CNSA 2.0." },
+    "SLH-DSA-SHA2-192s": { "family": "SLH-DSA", "kind": "signature", "standard": "FIPS 205", "category": 3, "public_key": 48, "secret_key": 96, "signature": 16224, "summary": "Stateless hash-based signatures: conservative security, large and slow to sign. Suited to long-lived roots." },
+    "FN-DSA-512": { "family": "FN-DSA", "kind": "signature", "standard": "FIPS 206 (draft)", "category": 1, "public_key": 897, "signature": 666, "summary": "Compact lattice signatures for bandwidth-constrained protocols, once FIPS 206 is final." },
+    "LMS": { "family": "LMS", "kind": "signature", "standard": "NIST SP 800-208", "category": 5, "public_key": 56, "signature": 1616, "summary": "Stateful hash-based signatures for software and firmware signing (CNSA 2.0)." },
+    "Composite ML-DSA-65 + ECDSA P-256": { "family": "hybrid", "kind": "signature", "standard": "IETF LAMPS composite signatures (draft)", "category": 3, "public_key": 2017, "signature": 3381, "summary": "One certificate carrying both signatures, for relying parties still on classical validation." },
+    "AES-256-GCM": { "family": "AES", "kind": "symmetric", "standard": "FIPS 197 / SP 800-38D", "category": 5, "summary": "Authenticated encryption with a 256-bit key: keeps a 128-bit margin against Grover's algorithm." },
+    "SHA-384": { "family": "SHA-2", "kind": "hash", "standard": "FIPS 180-4", "category": 5, "summary": "Collision-resistant hash; required by CNSA 2.0." },
+    "HMAC-SHA-384": { "family": "HMAC", "kind": "mac", "standard": "FIPS 198-1", "category": 5, "summary": "Message authentication with SHA-384." },
+    "Argon2id": { "family": "Argon2", "kind": "kdf", "standard": "RFC 9106", "category": null, "summary": "Memory-hard password hashing." },
+    "CSPRNG": { "family": "DRBG", "kind": "random", "standard": "SP 800-90A", "category": null, "summary": "The platform's cryptographic random generator (secrets, SecureRandom, crypto/rand)." }
+  },
+  "classical_sizes": {
+    "X25519": { "public_key": 32 },
+    "ECDH": { "public_key": 65 },
+    "DH": { "public_key": 256 },
+    "RSA": { "public_key": 256, "signature": 256 },
+    "ECDSA": { "public_key": 65, "signature": 72 },
+    "EdDSA": { "public_key": 32, "signature": 64 },
+    "DSA": { "public_key": 256, "signature": 56 }
+  },
+  "libraries": {
+    "java": { "name": "Bouncy Castle 1.79+ or JDK 24+ (ML-KEM, ML-DSA)", "summary": "JDK 24 adds ML-KEM and ML-DSA; Bouncy Castle provides them for older JDKs." },
+    "go": { "name": "Go 1.24+ (crypto/mlkem)", "summary": "crypto/mlkem and X25519MLKEM768 in crypto/tls by default." },
+    "python": { "name": "cryptography with OpenSSL 3.5+", "summary": "ML-KEM and ML-DSA through pyca/cryptography on a recent OpenSSL." },
+    "javascript": { "name": "@noble/post-quantum or Node.js on OpenSSL 3.5+", "summary": "Audited pure-JS ML-KEM and ML-DSA; hybrid TLS from the runtime." },
+    "rust": { "name": "aws-lc-rs or RustCrypto ml-kem / ml-dsa", "summary": "Production ML-KEM through aws-lc-rs; hybrid TLS in rustls." },
+    "c": { "name": "OpenSSL 3.5+ or liboqs", "summary": "OpenSSL 3.5 ships ML-KEM, ML-DSA and SLH-DSA with hybrid TLS groups." },
+    "csharp": { "name": ".NET 10 (MLKem, MLDsa)", "summary": ".NET 10 exposes ML-KEM and ML-DSA on supported platforms." },
+    "default": { "name": "A library with FIPS 203/204 support", "summary": "Choose a maintained library that implements the NIST standards." }
+  }
+}

@@ -1,0 +1,43 @@
+[project]
+name = "falcon-server"
+version = "1.0.0"
+description = "FALCON — post-quantum cryptographic discovery and migration intelligence (server)"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "Shriom Verma" }]
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "sqlalchemy>=2.0",
+    "alembic>=1.13",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "argon2-cffi>=23.1",
+    "cryptography>=50",  # ML-KEM (FIPS 203) and ML-DSA (FIPS 204) primitives
+    "python-multipart>=0.0.9",
+    "pefile>=2023.2.7",
+    "pyelftools>=0.31",
+]
+
+[project.scripts]
+falcon = "falcon.__main__:main"
+
+[project.optional-dependencies]
+postgres = ["psycopg[binary]>=3.1"]
+dev = ["pytest>=8", "httpx2"]
+desktop = ["pyinstaller>=6.10"]
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["falcon*"]
+
+[tool.setuptools.package-data]
+falcon = ["knowledge/*.json", "knowledge/rules/*.json", "migrations/*.py", "migrations/*.mako", "migrations/versions/*.py"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q -p no:cacheprovider"
+filterwarnings = ["error::DeprecationWarning:falcon.*"]

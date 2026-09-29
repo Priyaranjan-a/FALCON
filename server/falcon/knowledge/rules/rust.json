@@ -1,0 +1,322 @@
+{
+ "pack": "rust",
+ "version": "2026.09",
+ "prefilter": [
+  "rsa",
+  "ring::",
+  "signature::",
+  "aead::",
+  "digest::",
+  "Aes",
+  "Sha",
+  "Md5",
+  "ed25519",
+  "x25519",
+  "p256",
+  "p384",
+  "openssl",
+  "rustls",
+  "MlKem",
+  "MlDsa",
+  "pqcrypto",
+  "oqs",
+  "Hmac",
+  "Argon2",
+  "pbkdf2",
+  "ChaCha20",
+  "Tdes"
+ ],
+ "rules": [
+  {
+   "id": "rs.rsa-new",
+   "pattern": "RsaPrivateKey::new\\(\\s*&mut\\s+\\w+\\s*,\\s*(?P<bits>\\d{3,5})",
+   "grammar": "fixed",
+   "confidence": 0.96,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "rsa"
+  },
+  {
+   "id": "rs.rsa-pkcs1",
+   "pattern": "Pkcs1v15Sign|pkcs1v15::(?:Signing|Verifying)Key",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "sign",
+   "algorithm": "RSA",
+   "padding": "PKCS1v15",
+   "library": "rsa"
+  },
+  {
+   "id": "rs.rsa-pss",
+   "pattern": "pss::(?:Signing|Verifying)Key|Pss::new",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "sign",
+   "algorithm": "RSA",
+   "padding": "PSS",
+   "library": "rsa"
+  },
+  {
+   "id": "rs.rsa-oaep",
+   "pattern": "\\bOaep::new",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "encrypt",
+   "algorithm": "RSA",
+   "padding": "OAEP",
+   "library": "rsa"
+  },
+  {
+   "id": "rs.ring-rsa",
+   "pattern": "signature::RSA_(?:PKCS1|PSS)_(?P<bits>\\d{4})_\\d+_SHA(?P<shabits>\\d+)",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "sign",
+   "algorithm": "RSA",
+   "library": "ring"
+  },
+  {
+   "id": "rs.ring-ecdsa",
+   "pattern": "signature::ECDSA_P(?P<name>256|384)_SHA(?P<shabits>\\d+)",
+   "grammar": "curve",
+   "confidence": 0.93,
+   "function": "sign",
+   "algorithm": "ECDSA",
+   "library": "ring"
+  },
+  {
+   "id": "rs.ring-ed25519",
+   "pattern": "signature::(?:ED25519|Ed25519KeyPair)",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "sign",
+   "algorithm": "EdDSA",
+   "parameter": "Ed25519",
+   "library": "ring"
+  },
+  {
+   "id": "rs.ring-agreement",
+   "pattern": "agreement::(?P<name>X25519|ECDH_P256|ECDH_P384)\\b",
+   "grammar": "tls-group",
+   "confidence": 0.93,
+   "function": "key-agree",
+   "library": "ring"
+  },
+  {
+   "id": "rs.ring-aead",
+   "pattern": "aead::(?P<name>AES_128_GCM|AES_256_GCM|CHACHA20_POLY1305)\\b",
+   "grammar": "cipher",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "library": "ring"
+  },
+  {
+   "id": "rs.ring-digest",
+   "pattern": "digest::(?P<name>SHA1_FOR_LEGACY_USE_ONLY|SHA256|SHA384|SHA512)\\b",
+   "grammar": "hash",
+   "confidence": 0.93,
+   "function": "digest",
+   "library": "ring"
+  },
+  {
+   "id": "rs.ring-hmac",
+   "pattern": "hmac::HMAC_SHA(?P<shabits>256|384|512)\\b",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "mac",
+   "algorithm": "HMAC",
+   "library": "ring"
+  },
+  {
+   "id": "rs.aes-gcm",
+   "pattern": "\\bAes(?P<bits>128|192|256)Gcm(?:Siv)?\\b",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "AES",
+   "mode": "GCM",
+   "library": "aes-gcm"
+  },
+  {
+   "id": "rs.aes",
+   "pattern": "\\bAes(?P<bits>128|192|256)\\b(?!Gcm)",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "function": "encrypt",
+   "algorithm": "AES",
+   "library": "aes"
+  },
+  {
+   "id": "rs.chacha",
+   "pattern": "\\bX?ChaCha20Poly1305\\b",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "ChaCha20-Poly1305",
+   "parameter": "256",
+   "library": "chacha20poly1305"
+  },
+  {
+   "id": "rs.hash",
+   "pattern": "\\b(?P<name>Sha1|Sha256|Sha384|Sha512|Md5|Sha3_256)::(?:new|digest|default)\\(",
+   "grammar": "hash",
+   "confidence": 0.92,
+   "function": "digest",
+   "library": "RustCrypto"
+  },
+  {
+   "id": "rs.hmac",
+   "pattern": "Hmac::<\\s*(?P<name>Sha\\d+|Md5)\\s*>",
+   "grammar": "mac",
+   "confidence": 0.92,
+   "function": "mac",
+   "library": "hmac"
+  },
+  {
+   "id": "rs.p-curves",
+   "pattern": "\\b(?P<name>p256|p384|p521|k256)::ecdsa\\b",
+   "grammar": "curve",
+   "confidence": 0.9,
+   "function": "sign",
+   "algorithm": "ECDSA",
+   "library": "RustCrypto"
+  },
+  {
+   "id": "rs.ed25519",
+   "pattern": "ed25519_dalek::|SigningKey::generate",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "function": "sign",
+   "algorithm": "EdDSA",
+   "parameter": "Ed25519",
+   "library": "ed25519-dalek"
+  },
+  {
+   "id": "rs.x25519",
+   "pattern": "x25519_dalek::",
+   "grammar": "fixed",
+   "confidence": 0.88,
+   "function": "key-agree",
+   "algorithm": "X25519",
+   "library": "x25519-dalek"
+  },
+  {
+   "id": "rs.tdes",
+   "pattern": "\\bTdesEde3\\b",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "3DES",
+   "library": "des"
+  },
+  {
+   "id": "rs.argon2",
+   "pattern": "Argon2::default\\(\\)|argon2::Argon2",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "derive",
+   "algorithm": "Argon2",
+   "library": "argon2"
+  },
+  {
+   "id": "rs.pbkdf2",
+   "pattern": "pbkdf2_hmac(?:_array)?::<\\s*(?P<name>Sha\\d+)\\s*>",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "derive",
+   "algorithm": "PBKDF2",
+   "library": "pbkdf2",
+   "lookahead": "Sha(?P<shabits>\\d+)",
+   "lookahead_lines": 0
+  },
+  {
+   "id": "rs.openssl-rsa",
+   "pattern": "Rsa::generate\\(\\s*(?P<bits>\\d{3,5})",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "openssl"
+  },
+  {
+   "id": "rs.openssl-cipher",
+   "pattern": "Cipher::(?P<name>aes_\\w+|des_\\w+|rc4|chacha20_poly1305|bf_\\w+)\\(\\)",
+   "grammar": "evp",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "library": "openssl"
+  },
+  {
+   "id": "rs.openssl-md",
+   "pattern": "MessageDigest::(?P<name>md5|sha1|sha224|sha256|sha384|sha512|sha3_256)\\(\\)",
+   "grammar": "hash",
+   "confidence": 0.93,
+   "function": "digest",
+   "library": "openssl"
+  },
+  {
+   "id": "rs.openssl-version",
+   "pattern": "SslVersion::(?P<name>SSL3|TLS1|TLS1_1|TLS1_2|TLS1_3)\\b",
+   "grammar": "tls-version",
+   "confidence": 0.93,
+   "library": "openssl"
+  },
+  {
+   "id": "rs.rustls-version",
+   "pattern": "version::(?P<name>TLS12|TLS13)\\b",
+   "grammar": "tls-version",
+   "confidence": 0.9,
+   "library": "rustls"
+  },
+  {
+   "id": "rs.rustls-group",
+   "pattern": "\\b(?P<name>X25519MLKEM768|SECP256R1MLKEM768|X25519Kyber768Draft00)\\b",
+   "grammar": "tls-group",
+   "confidence": 0.93,
+   "function": "key-agree",
+   "library": "rustls"
+  },
+  {
+   "id": "rs.rustls-suite",
+   "pattern": "\\b(?P<name>TLS13_(?:AES_128_GCM|AES_256_GCM|CHACHA20_POLY1305)_SHA\\d+|TLS_ECDHE_\\w+)\\b",
+   "grammar": "tls-suite",
+   "confidence": 0.9,
+   "function": "tls",
+   "library": "rustls"
+  },
+  {
+   "id": "rs.mlkem",
+   "pattern": "\\bMlKem(?P<bits>512|768|1024)\\b",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "kem",
+   "algorithm": "ML-KEM",
+   "library": "ml-kem"
+  },
+  {
+   "id": "rs.mldsa",
+   "pattern": "\\bMlDsa(?P<bits>44|65|87)\\b",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "sign",
+   "algorithm": "ML-DSA",
+   "library": "ml-dsa"
+  },
+  {
+   "id": "rs.pqcrypto",
+   "pattern": "pqcrypto_(?P<name>kyber\\w*|mlkem\\w*|dilithium\\w*|falcon\\w*|sphincsplus\\w*|hqc\\w*)",
+   "grammar": "pqc",
+   "confidence": 0.9,
+   "function": "pqc",
+   "library": "pqcrypto"
+  },
+  {
+   "id": "rs.oqs",
+   "pattern": "oqs::(?:kem|sig)::Algorithm::(?P<name>\\w+)",
+   "grammar": "pqc",
+   "confidence": 0.93,
+   "function": "pqc",
+   "library": "liboqs-rust"
+  }
+ ]
+}

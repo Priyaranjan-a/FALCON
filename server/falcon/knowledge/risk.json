@@ -1,0 +1,125 @@
+{
+  "version": "2026.09",
+  "note": "Quantum risk intelligence: how FALCON scores, classifies and maps each cryptographic artefact. Weights and effort estimates are planning assumptions an organisation can review; policy dates are the published deadlines ('after 2030' takes effect on 1 January 2031). Check each rule against the current text of its publication.",
+
+  "scoring": {
+    "impact": {
+      "criticality": { "critical": 1.0, "high": 0.8, "moderate": 0.55, "low": 0.3 },
+      "exposure": { "external": 1.0, "partner": 0.9, "internal": 0.75, "isolated": 0.55 },
+      "classification": { "secret": 1.0, "restricted": 0.9, "confidential": 0.75, "internal": 0.55, "public": 0.35 }
+    },
+    "quantum_severity": { "vulnerable": 1.0, "weakened": 0.3, "unknown": 0.2, "hybrid": 0.0, "resistant": 0.0, "pqc": 0.0 },
+    "classical_likelihood": { "broken": 1.0, "weak": 0.75, "legacy": 0.4, "acceptable": 0.0, "strong": 0.0, "unknown": 0.0 },
+    "library": { "end_of_life": 0.6, "abandoned": 0.5, "no_pqc": 0.45, "pqc_unknown": 0.2 },
+    "hardware_quantum": 0.35,
+    "policy_pressure": { "midpoint_years": 2.5, "spread_years": 1.1 },
+    "bands": [
+      { "key": "critical", "label": "Critical", "min": 60 },
+      { "key": "high", "label": "High", "min": 35 },
+      { "key": "medium", "label": "Medium", "min": 15 },
+      { "key": "low", "label": "Low", "min": 1 },
+      { "key": "none", "label": "No quantum risk", "min": 0 }
+    ],
+    "likelihood_buckets": [
+      { "key": "rare", "label": "Rare", "max": 0.05 },
+      { "key": "unlikely", "label": "Unlikely", "max": 0.2 },
+      { "key": "possible", "label": "Possible", "max": 0.4 },
+      { "key": "likely", "label": "Likely", "max": 0.7 },
+      { "key": "almost-certain", "label": "Almost certain", "max": 1.01 }
+    ],
+    "impact_buckets": [
+      { "key": "minimal", "label": "Minimal", "max": 0.3 },
+      { "key": "minor", "label": "Minor", "max": 0.45 },
+      { "key": "moderate", "label": "Moderate", "max": 0.6 },
+      { "key": "major", "label": "Major", "max": 0.8 },
+      { "key": "severe", "label": "Severe", "max": 1.01 }
+    ],
+    "lifetime_bands": [
+      { "key": "ephemeral", "label": "Under 1 year", "max": 1 },
+      { "key": "short", "label": "1–5 years", "max": 5 },
+      { "key": "medium", "label": "5–10 years", "max": 10 },
+      { "key": "long", "label": "10–25 years", "max": 25 },
+      { "key": "archival", "label": "25 years or more", "max": 1000 }
+    ]
+  },
+
+  "migration": {
+    "algorithm.config": { "years": 0.25, "label": "Configuration change", "summary": "Change a protocol, library or service setting." },
+    "algorithm.code": { "years": 1.0, "label": "Code change", "summary": "Change application code, test and release." },
+    "algorithm.binary": { "years": 1.5, "label": "Rebuild or vendor update", "summary": "Rebuild compiled components or wait for a vendor release." },
+    "protocol": { "years": 0.5, "label": "Protocol upgrade", "summary": "Enable newer protocol versions and post-quantum key exchange." },
+    "certificate.leaf": { "years": 0.5, "label": "Certificate re-issuance", "summary": "Re-issue from a post-quantum-capable CA and redeploy." },
+    "certificate.ca": { "years": 3.0, "label": "PKI hierarchy migration", "summary": "Stand up a new CA hierarchy and re-establish trust with every relying party." },
+    "key": { "years": 0.5, "label": "Key replacement", "summary": "Generate and distribute replacement keys." },
+    "library.upgrade": { "years": 0.5, "label": "Library upgrade", "summary": "Upgrade to a release with post-quantum support." },
+    "library.replace": { "years": 1.5, "label": "Library replacement", "summary": "Replace a library that has no post-quantum path." },
+    "hardware": { "years": 3.0, "label": "Hardware refresh", "summary": "Procure, certify and deploy post-quantum-capable hardware." },
+    "cloud_service": { "years": 0.75, "label": "Cloud key re-creation", "summary": "Create post-quantum keys in the provider and move workloads to them." }
+  },
+
+  "frameworks": {
+    "nist-ir-8547": {
+      "name": "NIST IR 8547",
+      "authority": "NIST",
+      "title": "Transition to Post-Quantum Cryptography Standards",
+      "status": "Initial public draft, November 2024",
+      "source": "https://doi.org/10.6028/NIST.IR.8547.ipd",
+      "summary": "Quantum-vulnerable digital signatures and key establishment at 112-bit security are deprecated after 2030; all quantum-vulnerable public-key algorithms are disallowed after 2035.",
+      "deprecated_112_after": 2030,
+      "disallowed_after": 2035
+    },
+    "nist-sp-800-131a": {
+      "name": "NIST SP 800-131A",
+      "authority": "NIST",
+      "title": "Transitioning the Use of Cryptographic Algorithms and Key Lengths",
+      "status": "Revision 2 (2019), with the SHA-1 retirement announced in 2022",
+      "source": "https://doi.org/10.6028/NIST.SP.800-131Ar2",
+      "summary": "Security below 112 bits, TDEA after 2023 and SHA-1 for signature generation are disallowed; SHA-1 is to be retired entirely after 2030. Algorithms outside the NIST-approved set are not approved.",
+      "tdea_disallowed_after": 2023,
+      "sha1_retired_after": 2030,
+      "approved": [
+        "AES", "SHA-224", "SHA-256", "SHA-384", "SHA-512", "SHA-512/256", "SHA3-224", "SHA3-256", "SHA3-384", "SHA3-512",
+        "SHAKE128", "SHAKE256", "HMAC", "CMAC", "GMAC", "KMAC", "HKDF", "PBKDF2", "DRBG", "CSPRNG",
+        "RSA", "ECDSA", "EdDSA", "DH", "ECDH", "ML-KEM", "ML-DSA", "SLH-DSA", "LMS", "XMSS",
+        "X25519MLKEM768", "SecP256r1MLKEM768", "SecP384r1MLKEM1024"
+      ]
+    },
+    "cnsa-2.0": {
+      "name": "CNSA 2.0",
+      "authority": "NSA",
+      "title": "Commercial National Security Algorithm Suite 2.0",
+      "status": "Advisory, September 2022 (with later FAQ updates)",
+      "source": "https://media.defense.gov/2022/Sep/07/2003071834/-1/-1/0/CSA_CNSA_2.0_ALGORITHMS_.PDF",
+      "summary": "For national security systems: AES-256, SHA-384 or SHA-512, ML-KEM-1024 and ML-DSA-87, with LMS or XMSS for software and firmware signing, used exclusively by 2030 to 2033 depending on the kind of system.",
+      "approved": {
+        "AES": ["256"],
+        "SHA-384": null,
+        "SHA-512": null,
+        "ML-KEM": ["1024"],
+        "ML-DSA": ["87"],
+        "LMS": null,
+        "XMSS": null,
+        "HMAC": null
+      },
+      "categories": {
+        "infrastructure": { "category": "Traditional networking equipment", "prefer_by": 2026, "exclusive_after": 2030 },
+        "service": { "category": "Web browsers, servers and cloud services", "prefer_by": 2025, "exclusive_after": 2033 },
+        "application": { "category": "Web browsers, servers and cloud services", "prefer_by": 2025, "exclusive_after": 2033 },
+        "platform": { "category": "Operating systems and platforms", "prefer_by": 2027, "exclusive_after": 2033 },
+        "device": { "category": "Niche equipment", "prefer_by": 2030, "exclusive_after": 2033 },
+        "product": { "category": "Custom and legacy applications", "prefer_by": 2033, "exclusive_after": 2033 },
+        "data_store": { "category": "Custom and legacy applications", "prefer_by": 2033, "exclusive_after": 2033 }
+      }
+    },
+    "eu-pqc-roadmap": {
+      "name": "EU PQC Roadmap",
+      "authority": "European Union (NIS Cooperation Group)",
+      "title": "Coordinated Implementation Roadmap for the Transition to Post-Quantum Cryptography",
+      "status": "June 2025",
+      "source": "https://digital-strategy.ec.europa.eu/en/library/coordinated-implementation-roadmap-transition-post-quantum-cryptography",
+      "summary": "Begin the transition by the end of 2026, migrate high-risk use cases by the end of 2030 and as many systems as feasible by the end of 2035.",
+      "high_risk_after": 2030,
+      "all_after": 2035
+    }
+  }
+}

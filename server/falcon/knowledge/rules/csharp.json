@@ -1,0 +1,221 @@
+{
+ "pack": "csharp",
+ "version": "2026.09",
+ "prefilter": [
+  "Cryptography",
+  "RSA",
+  "ECDsa",
+  "ECDiffieHellman",
+  "Aes",
+  "TripleDES",
+  "DES",
+  "MD5",
+  "SHA1",
+  "SHA256",
+  "HMAC",
+  "Rfc2898",
+  "RandomNumberGenerator",
+  "SslProtocols",
+  "SecurityProtocolType",
+  "MLKem",
+  "MLDsa",
+  "SlhDsa",
+  "SecurityAlgorithms",
+  "new Random",
+  "CipherMode"
+ ],
+ "rules": [
+  {
+   "id": "cs.rsa",
+   "pattern": "RSA\\.Create\\(\\s*(?P<bits>\\d{3,5})?|new\\s+RSACryptoServiceProvider\\(\\s*(?P<bits_alt>\\d{3,5})?",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": ".NET",
+   "lookahead": "KeySize\\s*=\\s*(?P<bits>\\d{3,5})",
+   "lookahead_lines": 4
+  },
+  {
+   "id": "cs.ecdsa",
+   "pattern": "ECDsa\\.Create\\(\\s*(?:ECCurve\\.NamedCurves\\.(?P<name>\\w+))?",
+   "grammar": "curve",
+   "confidence": 0.93,
+   "function": "sign",
+   "algorithm": "ECDSA",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.ecdh",
+   "pattern": "ECDiffieHellman\\.Create\\(\\s*(?:ECCurve\\.NamedCurves\\.(?P<name>\\w+))?",
+   "grammar": "curve",
+   "confidence": 0.93,
+   "function": "key-agree",
+   "algorithm": "ECDH",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.aes",
+   "pattern": "Aes\\.Create\\(|new\\s+Aes(?:Managed|CryptoServiceProvider)\\(",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "encrypt",
+   "algorithm": "AES",
+   "library": ".NET",
+   "lookahead": "Mode\\s*=\\s*CipherMode\\.(?P<mode>ECB|CBC|CFB|CTS|OFB)|KeySize\\s*=\\s*(?P<bits>128|192|256)",
+   "lookahead_lines": 6
+  },
+  {
+   "id": "cs.aesgcm",
+   "pattern": "new\\s+AesGcm\\(|new\\s+AesCcm\\(",
+   "grammar": "fixed",
+   "confidence": 0.92,
+   "function": "encrypt",
+   "algorithm": "AES",
+   "mode": "GCM",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.3des",
+   "pattern": "TripleDES\\.Create\\(|new\\s+TripleDESCryptoServiceProvider\\(",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "encrypt",
+   "algorithm": "3DES",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.des",
+   "pattern": "\\bDES\\.Create\\(|new\\s+DESCryptoServiceProvider\\(",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "encrypt",
+   "algorithm": "DES",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.rc2",
+   "pattern": "RC2\\.Create\\(|new\\s+RC2CryptoServiceProvider\\(",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "encrypt",
+   "algorithm": "RC2",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.chacha",
+   "pattern": "new\\s+ChaCha20Poly1305\\(",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "ChaCha20-Poly1305",
+   "parameter": "256",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.hash",
+   "pattern": "\\b(?P<name>MD5|SHA1|SHA256|SHA384|SHA512|SHA3_256|SHA3_384|SHA3_512)\\.(?:Create|HashData|TryHashData)\\(|new\\s+(?P<name_alt>MD5|SHA1|SHA256|SHA384|SHA512)(?:CryptoServiceProvider|Managed|Cng)\\(",
+   "grammar": "hash",
+   "confidence": 0.93,
+   "function": "digest",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.hmac",
+   "pattern": "new\\s+HMAC(?P<name>MD5|SHA1|SHA256|SHA384|SHA512)\\(|HMAC(?P<name_alt>MD5|SHA1|SHA256|SHA384|SHA512)\\.HashData\\(",
+   "grammar": "mac",
+   "confidence": 0.93,
+   "function": "mac",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.pbkdf2",
+   "pattern": "new\\s+Rfc2898DeriveBytes\\(|Rfc2898DeriveBytes\\.Pbkdf2\\(",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "derive",
+   "algorithm": "PBKDF2",
+   "hash": "SHA-1",
+   "library": ".NET",
+   "lookahead": "HashAlgorithmName\\.(?P<hash>MD5|SHA1|SHA256|SHA384|SHA512)",
+   "lookahead_lines": 2,
+   "note": "Rfc2898DeriveBytes defaults to HMAC-SHA1 unless a hash is given"
+  },
+  {
+   "id": "cs.random",
+   "pattern": "RandomNumberGenerator\\.(?:Create|GetBytes|Fill|GetInt32)\\(",
+   "grammar": "random",
+   "confidence": 0.85,
+   "function": "random",
+   "algorithm": "CSPRNG",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.insecure-random",
+   "pattern": "(?i)(?:token|secret|password|salt|nonce|otp|session|key)\\w*\\s*=\\s*new\\s+Random\\(",
+   "grammar": "random",
+   "confidence": 0.75,
+   "function": "random",
+   "algorithm": "Insecure PRNG",
+   "note": "System.Random is predictable; use RandomNumberGenerator"
+  },
+  {
+   "id": "cs.sslprotocols",
+   "pattern": "SslProtocols\\.(?P<name>Tls13|Tls12|Tls11|Tls|Ssl3|Ssl2)\\b",
+   "grammar": "tls-version",
+   "confidence": 0.92,
+   "library": ".NET"
+  },
+  {
+   "id": "cs.securityprotocol",
+   "pattern": "SecurityProtocolType\\.(?P<name>Tls13|Tls12|Tls11|Tls|Ssl3)\\b",
+   "grammar": "tls-version",
+   "confidence": 0.92,
+   "library": ".NET"
+  },
+  {
+   "id": "cs.rsa-padding",
+   "pattern": "RSAEncryptionPadding\\.(?P<name>Pkcs1|OaepSHA1|OaepSHA256|OaepSHA384|OaepSHA512)\\b",
+   "grammar": "fixed",
+   "confidence": 0.88,
+   "function": "encrypt",
+   "algorithm": "RSA",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.mlkem",
+   "pattern": "MLKemAlgorithm\\.MLKem(?P<bits>512|768|1024)\\b|\\bMLKem\\.GenerateKey\\(",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "kem",
+   "algorithm": "ML-KEM",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.mldsa",
+   "pattern": "MLDsaAlgorithm\\.MLDsa(?P<bits>44|65|87)\\b|\\bMLDsa\\.GenerateKey\\(",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "sign",
+   "algorithm": "ML-DSA",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.slhdsa",
+   "pattern": "\\bSlhDsa(?:Algorithm)?\\.",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "function": "sign",
+   "algorithm": "SLH-DSA",
+   "library": ".NET"
+  },
+  {
+   "id": "cs.jwt",
+   "pattern": "SecurityAlgorithms\\.(?P<name>HmacSha\\d{3}|RsaSha\\d{3}|EcdsaSha\\d{3}|RsaSsaPssSha\\d{3})\\b",
+   "grammar": "dotnet-jwt",
+   "confidence": 0.9,
+   "function": "sign",
+   "library": "Microsoft.IdentityModel"
+  }
+ ]
+}

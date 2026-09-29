@@ -1,0 +1,80 @@
+{
+ "pack": "universal",
+ "version": "2026.09",
+ "prefilter": [
+  "ML-KEM",
+  "MLKEM",
+  "ML-DSA",
+  "MLDSA",
+  "SLH-DSA",
+  "Kyber",
+  "Dilithium",
+  "SPHINCS",
+  "Falcon",
+  "TLS_",
+  "X25519MLKEM",
+  "pkcs11",
+  "cryptoki",
+  "softhsm",
+  "cknfast",
+  "luna",
+  "yubihsm",
+  "cloudhsm",
+  "tpm2",
+  "BEGIN",
+  "hsm"
+ ],
+ "rules": [
+  {
+   "id": "any.pqc-name",
+   "pattern": "[\"\\'`](?P<name>ML-KEM-(?:512|768|1024)|ML-DSA-(?:44|65|87)|SLH-DSA-(?:SHA2|SHAKE)-(?:128|192|256)[sf]|Kyber(?:512|768|1024)|Dilithium[235]|Falcon-(?:512|1024)|X25519MLKEM768|SecP256r1MLKEM768)[\"\\'`]",
+   "grammar": "pqc",
+   "confidence": 0.85,
+   "function": "pqc"
+  },
+  {
+   "id": "any.iana-suite",
+   "pattern": "\\b(?P<name>TLS_(?:ECDHE|DHE|RSA|ECDH|DH|PSK)_[A-Z0-9_]+_WITH_[A-Z0-9_]+|TLS_(?:AES_128_GCM|AES_256_GCM|CHACHA20_POLY1305)_SHA\\d{3})\\b",
+   "grammar": "tls-suite",
+   "confidence": 0.85,
+   "function": "tls"
+  },
+  {
+   "id": "any.pkcs11-module",
+   "pattern": "(?<![\\w./\\\\:-])(?P<module>[\\w./\\\\:-]*?(?:libsofthsm2|softhsm2|libCryptoki2(?:_64)?|cryptoki|libcknfast|cknfast|cs_pkcs11_R\\d|libykcs11|yubihsm_pkcs11|opensc-pkcs11|libcloudhsm_pkcs11|cloudhsm_pkcs11|libtpm2_pkcs11|libeTPkcs11|libnethsm_pkcs11|primusP11|fortanix_pkcs11)\\.(?:so|dll|dylib)(?:\\.\\d+)*)",
+   "grammar": "fixed",
+   "confidence": 0.9,
+   "gate": "(?:libsofthsm2|softhsm2|libCryptoki2|cryptoki|cknfast|cs_pkcs11_R|libykcs11|yubihsm_pkcs11|opensc-pkcs11|cloudhsm_pkcs11|libtpm2_pkcs11|libeTPkcs11|libnethsm_pkcs11|primusP11|fortanix_pkcs11)",
+   "kind": "hardware",
+   "attrs": {
+    "type": "hsm",
+    "interface": "PKCS#11"
+   }
+  },
+  {
+   "id": "any.openssl-pkcs11-engine",
+   "pattern": "(?i)engine_id\\s*=\\s*pkcs11|pkcs11-provider|provider\\s*=\\s*pkcs11",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "kind": "hardware",
+   "attrs": {
+    "type": "hsm",
+    "interface": "PKCS#11",
+    "label": "PKCS#11 engine or provider (OpenSSL)"
+   }
+  },
+  {
+   "id": "any.tpm2-provider",
+   "pattern": "(?i)tpm2-openssl|tpm2tss-engine|\"Microsoft Platform Crypto Provider\"",
+   "grammar": "fixed",
+   "confidence": 0.88,
+   "kind": "hardware",
+   "attrs": {
+    "type": "tpm",
+    "interface": "TPM 2.0",
+    "vendor": "TPM 2.0",
+    "label": "Trusted Platform Module 2.0"
+   }
+  }
+ ]
+}

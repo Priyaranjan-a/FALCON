@@ -1,0 +1,197 @@
+{
+ "pack": "php",
+ "version": "2026.09",
+ "prefilter": [
+  "openssl_",
+  "md5",
+  "sha1",
+  "hash",
+  "password_hash",
+  "mcrypt",
+  "sodium",
+  "random_",
+  "mt_rand",
+  "phpseclib",
+  "JWT",
+  "STREAM_CRYPTO",
+  "RSA",
+  "AES"
+ ],
+ "rules": [
+  {
+   "id": "php.pkey-new",
+   "pattern": "openssl_pkey_new\\(",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "php-openssl",
+   "lookahead": "private_key_bits[\"\\']?\\s*=>\\s*(?P<bits>\\d{3,5})|curve_name[\"\\']?\\s*=>\\s*[\"\\'](?P<curve>[\\w-]+)[\"\\']",
+   "lookahead_lines": 5
+  },
+  {
+   "id": "php.pkey-type-ec",
+   "pattern": "OPENSSL_KEYTYPE_EC\\b",
+   "grammar": "fixed",
+   "confidence": 0.85,
+   "function": "keygen",
+   "algorithm": "ECDSA",
+   "library": "php-openssl",
+   "lookahead": "curve_name[\"\\']?\\s*=>\\s*[\"\\'](?P<curve>[\\w-]+)[\"\\']",
+   "lookahead_lines": 4
+  },
+  {
+   "id": "php.encrypt",
+   "pattern": "openssl_(?:en|de)crypt\\([^,]+,\\s*[\"\\'](?P<name>[\\w-]+)[\"\\']",
+   "grammar": "cipher",
+   "confidence": 0.95,
+   "function": "encrypt",
+   "library": "php-openssl"
+  },
+  {
+   "id": "php.sign",
+   "pattern": "OPENSSL_ALGO_(?P<name>SHA1|SHA224|SHA256|SHA384|SHA512|MD5|MD4)\\b",
+   "grammar": "hash",
+   "confidence": 0.9,
+   "function": "sign",
+   "library": "php-openssl"
+  },
+  {
+   "id": "php.md5-sha1",
+   "pattern": "(?<![\\w>$])(?P<name>md5|sha1)(?:_file)?\\s*\\(",
+   "grammar": "hash",
+   "confidence": 0.85,
+   "function": "digest",
+   "library": "php"
+  },
+  {
+   "id": "php.hash",
+   "pattern": "\\bhash(?:_file|_init)?\\(\\s*[\"\\'](?P<name>[\\w/-]+)[\"\\']",
+   "grammar": "hash",
+   "confidence": 0.93,
+   "function": "digest",
+   "library": "php"
+  },
+  {
+   "id": "php.hmac",
+   "pattern": "hash_hmac(?:_file)?\\(\\s*[\"\\'](?P<name>[\\w/-]+)[\"\\']",
+   "grammar": "mac",
+   "confidence": 0.93,
+   "function": "mac",
+   "library": "php"
+  },
+  {
+   "id": "php.pbkdf2",
+   "pattern": "hash_pbkdf2\\(\\s*[\"\\'](?P<hash>[\\w/-]+)[\"\\']",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "derive",
+   "algorithm": "PBKDF2",
+   "library": "php"
+  },
+  {
+   "id": "php.password-hash",
+   "pattern": "password_hash\\([^,]+,\\s*PASSWORD_(?P<name>BCRYPT|ARGON2I|ARGON2ID|DEFAULT)\\b",
+   "grammar": "any",
+   "confidence": 0.9,
+   "function": "derive",
+   "library": "php"
+  },
+  {
+   "id": "php.mcrypt",
+   "pattern": "mcrypt_(?:encrypt|decrypt|module_open)\\(\\s*MCRYPT_(?P<name>[A-Z0-9_]+)",
+   "grammar": "cipher",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "library": "mcrypt",
+   "note": "mcrypt was removed in PHP 7.2"
+  },
+  {
+   "id": "php.sodium-box",
+   "pattern": "sodium_crypto_box(?:_seal|_keypair)?\\b",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "key-agree",
+   "algorithm": "X25519",
+   "library": "sodium"
+  },
+  {
+   "id": "php.sodium-sign",
+   "pattern": "sodium_crypto_sign(?:_detached|_keypair)?\\b",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "sign",
+   "algorithm": "EdDSA",
+   "parameter": "Ed25519",
+   "library": "sodium"
+  },
+  {
+   "id": "php.sodium-secretbox",
+   "pattern": "sodium_crypto_secretbox\\b",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "XSalsa20-Poly1305",
+   "library": "sodium"
+  },
+  {
+   "id": "php.sodium-aead",
+   "pattern": "sodium_crypto_aead_(?P<name>aes256gcm|chacha20poly1305|xchacha20poly1305)",
+   "grammar": "cipher",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "library": "sodium"
+  },
+  {
+   "id": "php.random",
+   "pattern": "\\b(?:random_bytes|random_int|openssl_random_pseudo_bytes)\\(",
+   "grammar": "random",
+   "confidence": 0.85,
+   "function": "random",
+   "algorithm": "CSPRNG",
+   "library": "php"
+  },
+  {
+   "id": "php.insecure-random",
+   "pattern": "(?i)\\$(?:token|secret|password|salt|nonce|otp|session|key)\\w*\\s*=[^\\n;]*\\b(?:mt_rand|rand|uniqid)\\(",
+   "grammar": "random",
+   "confidence": 0.75,
+   "function": "random",
+   "algorithm": "Insecure PRNG",
+   "note": "mt_rand, rand and uniqid are predictable"
+  },
+  {
+   "id": "php.phpseclib-rsa",
+   "pattern": "RSA::createKey\\(\\s*(?P<bits>\\d{3,5})?",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "keygen",
+   "algorithm": "RSA",
+   "library": "phpseclib"
+  },
+  {
+   "id": "php.phpseclib-ec",
+   "pattern": "EC::createKey\\(\\s*[\"\\'](?P<name>[\\w-]+)[\"\\']",
+   "grammar": "curve",
+   "confidence": 0.93,
+   "function": "keygen",
+   "algorithm": "ECDSA",
+   "library": "phpseclib"
+  },
+  {
+   "id": "php.jwt",
+   "pattern": "JWT::(?:encode|decode)\\(.*[\"\\'](?P<name>(?:HS|RS|ES|PS)\\d{3}|EdDSA)[\"\\']",
+   "grammar": "jose",
+   "confidence": 0.9,
+   "function": "sign",
+   "library": "firebase/php-jwt"
+  },
+  {
+   "id": "php.stream-crypto",
+   "pattern": "STREAM_CRYPTO_METHOD_(?P<name>TLSv1_[0-3]|SSLv3|SSLv2|TLS)_(?:CLIENT|SERVER)",
+   "grammar": "tls-version",
+   "confidence": 0.9,
+   "library": "php"
+  }
+ ]
+}

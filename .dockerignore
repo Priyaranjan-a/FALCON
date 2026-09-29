@@ -1,0 +1,20 @@
+# Only the sources the image builds from.
+**/node_modules
+**/__pycache__
+**/*.py[cod]
+**/.venv
+**/.pytest_cache
+**/*.egg-info
+**/*.tsbuildinfo
+console/dist
+server/dist
+server/build
+server/tests
+desktop
+data
+docs
+fixtures
+scripts
+.git
+.env
+*.local

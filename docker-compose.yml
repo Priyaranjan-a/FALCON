@@ -1,0 +1,37 @@
+# FALCON on one host.
+#
+#   docker compose up -d            then open http://localhost:8600 and sign in as
+#                                   admin@falcon.local / Quantum-Safe-2026! (the demo; see below)
+#   FALCON_SCAN_DIR=/srv/code docker compose up -d   to make a folder scannable
+#
+# The container serves plain HTTP on 8600. Anywhere but localhost, put a TLS
+# reverse proxy in front: session cookies are Secure in production.
+
+services:
+  falcon:
+    build: .
+    image: falcon:1.0.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8600:8600"
+    environment:
+      # A fresh volume starts as the demonstration: an admin account, ten systems and
+      # scans of the sample estates mounted at /scan. Set to "false" for a clean setup.
+      FALCON_DEMO: "true"
+      # Probe TLS endpoints from the server (off by default for servers).
+      FALCON_ALLOW_NETWORK_PROBES: "true"
+      # Optional: PostgreSQL instead of the bundled SQLite.
+      # FALCON_DATABASE_URL: postgresql+psycopg://falcon:secret@db/falcon
+    volumes:
+      - falcon-data:/var/lib/falcon
+      # Folders the platform may scan, read-only.
+      - ${FALCON_SCAN_DIR:-./fixtures}:/scan:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  falcon-data:

@@ -1,0 +1,202 @@
+{
+ "pack": "swift",
+ "version": "2026.09",
+ "prefilter": [
+  "CryptoKit",
+  "P256",
+  "P384",
+  "P521",
+  "Curve25519",
+  "AES\\.",
+  "ChaChaPoly",
+  "SHA256",
+  "SHA384",
+  "SHA512",
+  "Insecure",
+  "HMAC",
+  "SecureEnclave",
+  "kCC",
+  "CC_",
+  "kSecAttr",
+  "MLKEM",
+  "MLDSA",
+  "XWing",
+  "TLSVersion",
+  "tls_protocol"
+ ],
+ "rules": [
+  {
+   "id": "sw.p-sign",
+   "pattern": "\\bP(?P<name>256|384|521)\\.Signing\\b",
+   "grammar": "curve",
+   "confidence": 0.95,
+   "function": "sign",
+   "algorithm": "ECDSA",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.p-agree",
+   "pattern": "\\bP(?P<name>256|384|521)\\.KeyAgreement\\b",
+   "grammar": "curve",
+   "confidence": 0.95,
+   "function": "key-agree",
+   "algorithm": "ECDH",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.25519-sign",
+   "pattern": "Curve25519\\.Signing\\b",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "sign",
+   "algorithm": "EdDSA",
+   "parameter": "Ed25519",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.25519-agree",
+   "pattern": "Curve25519\\.KeyAgreement\\b",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "key-agree",
+   "algorithm": "X25519",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.aes-gcm",
+   "pattern": "AES\\.GCM\\.(?:seal|open|SealedBox)",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "AES",
+   "mode": "GCM",
+   "library": "CryptoKit",
+   "lookahead": "SymmetricKey\\(\\s*size:\\s*\\.bits(?P<bits>128|192|256)",
+   "lookahead_lines": 0
+  },
+  {
+   "id": "sw.symmetric-key",
+   "pattern": "SymmetricKey\\(\\s*size:\\s*\\.bits(?P<bits>128|192|256)",
+   "grammar": "fixed",
+   "confidence": 0.8,
+   "function": "keygen",
+   "algorithm": "AES",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.chachapoly",
+   "pattern": "ChaChaPoly\\.(?:seal|open|SealedBox)",
+   "grammar": "fixed",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "algorithm": "ChaCha20-Poly1305",
+   "parameter": "256",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.hash",
+   "pattern": "\\b(?P<name>SHA256|SHA384|SHA512)\\.hash\\(",
+   "grammar": "hash",
+   "confidence": 0.93,
+   "function": "digest",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.insecure",
+   "pattern": "Insecure\\.(?P<name>MD5|SHA1)\\b",
+   "grammar": "hash",
+   "confidence": 0.95,
+   "function": "digest",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.hmac",
+   "pattern": "HMAC<\\s*(?:Insecure\\.)?(?P<name>SHA256|SHA384|SHA512|MD5|SHA1)\\s*>",
+   "grammar": "mac",
+   "confidence": 0.93,
+   "function": "mac",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.mlkem",
+   "pattern": "\\bMLKEM(?P<bits>768|1024)\\b",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "kem",
+   "algorithm": "ML-KEM",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.mldsa",
+   "pattern": "\\bMLDSA(?P<bits>65|87)\\b",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "sign",
+   "algorithm": "ML-DSA",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.xwing",
+   "pattern": "\\bXWingMLKEM768X25519\\b",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "function": "kem",
+   "algorithm": "X-Wing",
+   "library": "CryptoKit"
+  },
+  {
+   "id": "sw.cc-alg",
+   "pattern": "kCCAlgorithm(?P<name>AES128|AES|DES|3DES|CAST|RC4|RC2|Blowfish)\\b",
+   "grammar": "cipher",
+   "confidence": 0.93,
+   "function": "encrypt",
+   "library": "CommonCrypto"
+  },
+  {
+   "id": "sw.cc-hash",
+   "pattern": "\\bCC_(?P<name>MD5|SHA1|SHA224|SHA256|SHA384|SHA512)\\(",
+   "grammar": "hash",
+   "confidence": 0.93,
+   "function": "digest",
+   "library": "CommonCrypto"
+  },
+  {
+   "id": "sw.cc-hmac",
+   "pattern": "kCCHmacAlg(?P<name>MD5|SHA1|SHA224|SHA256|SHA384|SHA512)\\b",
+   "grammar": "mac",
+   "confidence": 0.93,
+   "function": "mac",
+   "library": "CommonCrypto"
+  },
+  {
+   "id": "sw.sec-keytype",
+   "pattern": "kSecAttrKeyType(?P<name>RSA|EC|ECSECPrimeRandom)\\b",
+   "grammar": "any",
+   "confidence": 0.88,
+   "function": "keygen",
+   "library": "Security",
+   "lookahead": "kSecAttrKeySizeInBits[^\\d\\n]*(?P<bits>\\d{3,4})",
+   "lookahead_lines": 4
+  },
+  {
+   "id": "sw.secure-enclave",
+   "pattern": "SecureEnclave\\.P256|kSecAttrTokenIDSecureEnclave",
+   "grammar": "fixed",
+   "confidence": 0.95,
+   "kind": "hardware",
+   "attrs": {
+    "type": "secure-element",
+    "interface": "Secure Enclave",
+    "vendor": "Apple Secure Enclave",
+    "label": "Apple Secure Enclave"
+   }
+  },
+  {
+   "id": "sw.tls",
+   "pattern": "(?:minimumTLSVersion|tls_protocol_version_t)\\s*[=.]\\s*\\.?(?P<name>TLSv1[0-3]|tlsProtocol1[0-3])",
+   "grammar": "tls-version",
+   "confidence": 0.9,
+   "library": "Network"
+  }
+ ]
+}

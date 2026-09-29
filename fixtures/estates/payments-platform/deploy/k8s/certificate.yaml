@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: payments-api
+spec:
+  secretName: payments-api-tls
+  dnsNames:
+    - api.payments.gov.example
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: internal-ca
+    kind: ClusterIssuer

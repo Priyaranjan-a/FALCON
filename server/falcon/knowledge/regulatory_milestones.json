@@ -1,0 +1,257 @@
+{
+  "version": "2026.09",
+  "note": "Milestones as published by each authority. Verify against the current edition of each source before relying on a date for compliance decisions.",
+  "authorities": {
+    "NIST": {"name": "NIST", "region": "United States", "kind": "Standards body"},
+    "NSA": {"name": "NSA", "region": "United States", "kind": "National security systems"},
+    "WH": {"name": "White House", "region": "United States", "kind": "Policy"},
+    "EU": {"name": "European Union", "region": "Europe", "kind": "Policy"},
+    "NCSC": {"name": "NCSC", "region": "United Kingdom", "kind": "National guidance"},
+    "CCCS": {"name": "Canadian Centre for Cyber Security", "region": "Canada", "kind": "National guidance"},
+    "ASD": {"name": "ASD", "region": "Australia", "kind": "National guidance"}
+  },
+  "milestones": [
+    {
+      "id": "nsm10-2035",
+      "date": "2035-12-31",
+      "precision": "year",
+      "authority": "WH",
+      "framework": "NSM-10",
+      "kind": "deadline",
+      "title": "Mitigate quantum risk across federal systems",
+      "detail": "National Security Memorandum 10 sets the goal of mitigating as much quantum risk as feasible by 2035.",
+      "source": "National Security Memorandum 10 (May 2022)"
+    },
+    {
+      "id": "fips-203-205",
+      "date": "2024-08-13",
+      "precision": "day",
+      "authority": "NIST",
+      "framework": "FIPS 203/204/205",
+      "kind": "publication",
+      "title": "First post-quantum standards published",
+      "detail": "FIPS 203 (ML-KEM), FIPS 204 (ML-DSA) and FIPS 205 (SLH-DSA) become final standards.",
+      "source": "NIST FIPS 203, FIPS 204, FIPS 205"
+    },
+    {
+      "id": "nist-ir-8547-draft",
+      "date": "2024-11-12",
+      "precision": "day",
+      "authority": "NIST",
+      "framework": "NIST IR 8547",
+      "kind": "publication",
+      "title": "Transition timeline proposed",
+      "detail": "NIST IR 8547 (initial public draft) proposes deprecating and then disallowing quantum-vulnerable public-key algorithms.",
+      "source": "NIST IR 8547 ipd, Transition to Post-Quantum Cryptography Standards"
+    },
+    {
+      "id": "nist-hqc",
+      "date": "2025-03-11",
+      "precision": "day",
+      "authority": "NIST",
+      "framework": "NIST PQC",
+      "kind": "publication",
+      "title": "HQC selected as backup KEM",
+      "detail": "HQC is selected for standardisation as a code-based alternative to ML-KEM.",
+      "source": "NIST IR 8545"
+    },
+    {
+      "id": "nist-ir-8547-2030",
+      "date": "2030-12-31",
+      "precision": "year",
+      "authority": "NIST",
+      "framework": "NIST IR 8547",
+      "kind": "deadline",
+      "title": "112-bit RSA and ECC deprecated",
+      "detail": "Quantum-vulnerable digital signature and key-establishment algorithms at the 112-bit security level are deprecated after 2030.",
+      "source": "NIST IR 8547 ipd"
+    },
+    {
+      "id": "nist-ir-8547-2035",
+      "date": "2035-12-31",
+      "precision": "year",
+      "authority": "NIST",
+      "framework": "NIST IR 8547",
+      "kind": "deadline",
+      "title": "All quantum-vulnerable public-key algorithms disallowed",
+      "detail": "RSA, ECDSA, EdDSA, DH and ECDH are disallowed after 2035 at every security level.",
+      "source": "NIST IR 8547 ipd"
+    },
+    {
+      "id": "cnsa2-signing-prefer",
+      "date": "2025-12-31",
+      "precision": "year",
+      "authority": "NSA",
+      "framework": "CNSA 2.0",
+      "kind": "deadline",
+      "title": "Software and firmware signing: support and prefer",
+      "detail": "Software and firmware signing, web browsers, servers and cloud services should support and prefer CNSA 2.0 algorithms by 2025.",
+      "source": "NSA CNSA 2.0 Suite advisory"
+    },
+    {
+      "id": "cnsa2-networking-prefer",
+      "date": "2026-12-31",
+      "precision": "year",
+      "authority": "NSA",
+      "framework": "CNSA 2.0",
+      "kind": "deadline",
+      "title": "Networking equipment: support and prefer",
+      "detail": "Traditional networking equipment such as VPNs and routers should support and prefer CNSA 2.0 by 2026.",
+      "source": "NSA CNSA 2.0 Suite advisory"
+    },
+    {
+      "id": "cnsa2-acquisitions",
+      "date": "2027-01-01",
+      "precision": "day",
+      "authority": "NSA",
+      "framework": "CNSA 2.0",
+      "kind": "deadline",
+      "title": "New NSS acquisitions must be CNSA 2.0 compliant",
+      "detail": "New equipment acquired for National Security Systems must be CNSA 2.0 compliant.",
+      "source": "NSA CNSA 2.0 FAQ"
+    },
+    {
+      "id": "cnsa2-os-prefer",
+      "date": "2027-12-31",
+      "precision": "year",
+      "authority": "NSA",
+      "framework": "CNSA 2.0",
+      "kind": "deadline",
+      "title": "Operating systems: support and prefer",
+      "detail": "Operating systems should support and prefer CNSA 2.0 algorithms by 2027.",
+      "source": "NSA CNSA 2.0 Suite advisory"
+    },
+    {
+      "id": "cnsa2-signing-exclusive",
+      "date": "2030-12-31",
+      "precision": "year",
+      "authority": "NSA",
+      "framework": "CNSA 2.0",
+      "kind": "deadline",
+      "title": "Signing and networking: CNSA 2.0 exclusively",
+      "detail": "Software and firmware signing and traditional networking equipment use CNSA 2.0 exclusively by 2030.",
+      "source": "NSA CNSA 2.0 Suite advisory"
+    },
+    {
+      "id": "cnsa2-exclusive-2033",
+      "date": "2033-12-31",
+      "precision": "year",
+      "authority": "NSA",
+      "framework": "CNSA 2.0",
+      "kind": "deadline",
+      "title": "Browsers, servers, cloud and operating systems: exclusively",
+      "detail": "Web browsers, servers, cloud services, operating systems and niche equipment use CNSA 2.0 exclusively, and custom and legacy applications are updated or replaced, by 2033.",
+      "source": "NSA CNSA 2.0 Suite advisory"
+    },
+    {
+      "id": "eu-roadmap-2026",
+      "date": "2026-12-31",
+      "precision": "year",
+      "authority": "EU",
+      "framework": "EU PQC Roadmap",
+      "kind": "deadline",
+      "title": "Begin the transition",
+      "detail": "Member States start transitioning: national plans, cryptographic inventories and first steps completed by the end of 2026.",
+      "source": "Coordinated Implementation Roadmap for the Transition to Post-Quantum Cryptography (NIS Cooperation Group, June 2025)"
+    },
+    {
+      "id": "eu-roadmap-2030",
+      "date": "2030-12-31",
+      "precision": "year",
+      "authority": "EU",
+      "framework": "EU PQC Roadmap",
+      "kind": "deadline",
+      "title": "High-risk use cases migrated",
+      "detail": "High-risk use cases complete their transition to post-quantum cryptography by the end of 2030.",
+      "source": "Coordinated Implementation Roadmap for the Transition to Post-Quantum Cryptography (NIS Cooperation Group, June 2025)"
+    },
+    {
+      "id": "eu-roadmap-2035",
+      "date": "2035-12-31",
+      "precision": "year",
+      "authority": "EU",
+      "framework": "EU PQC Roadmap",
+      "kind": "deadline",
+      "title": "As many systems as feasible migrated",
+      "detail": "Medium-risk use cases, and as many systems as feasible, transition by 2035.",
+      "source": "Coordinated Implementation Roadmap for the Transition to Post-Quantum Cryptography (NIS Cooperation Group, June 2025)"
+    },
+    {
+      "id": "ncsc-2028",
+      "date": "2028-12-31",
+      "precision": "year",
+      "authority": "NCSC",
+      "framework": "NCSC PQC timelines",
+      "kind": "deadline",
+      "title": "Discovery complete and migration goals defined",
+      "detail": "Organisations define migration goals, complete discovery of their cryptographic estate and build an initial plan by 2028.",
+      "source": "NCSC, Timelines for migration to post-quantum cryptography (March 2025)"
+    },
+    {
+      "id": "ncsc-2031",
+      "date": "2031-12-31",
+      "precision": "year",
+      "authority": "NCSC",
+      "framework": "NCSC PQC timelines",
+      "kind": "deadline",
+      "title": "Highest-priority migration complete",
+      "detail": "Early, highest-priority migration activities are complete and the plan is refined by 2031.",
+      "source": "NCSC, Timelines for migration to post-quantum cryptography (March 2025)"
+    },
+    {
+      "id": "ncsc-2035",
+      "date": "2035-12-31",
+      "precision": "year",
+      "authority": "NCSC",
+      "framework": "NCSC PQC timelines",
+      "kind": "deadline",
+      "title": "Migration complete",
+      "detail": "Migration to post-quantum cryptography is complete for all systems, services and products by 2035.",
+      "source": "NCSC, Timelines for migration to post-quantum cryptography (March 2025)"
+    },
+    {
+      "id": "cccs-2026",
+      "date": "2026-04-30",
+      "precision": "month",
+      "authority": "CCCS",
+      "framework": "Government of Canada PQC roadmap",
+      "kind": "deadline",
+      "title": "Departmental migration plans",
+      "detail": "Federal departments develop their post-quantum migration plans by April 2026.",
+      "source": "ITSM.40.001, Roadmap for the migration to post-quantum cryptography for the Government of Canada"
+    },
+    {
+      "id": "cccs-2031",
+      "date": "2031-12-31",
+      "precision": "year",
+      "authority": "CCCS",
+      "framework": "Government of Canada PQC roadmap",
+      "kind": "deadline",
+      "title": "High-priority systems migrated",
+      "detail": "Migration of high-priority systems completes by the end of 2031.",
+      "source": "ITSM.40.001, Roadmap for the migration to post-quantum cryptography for the Government of Canada"
+    },
+    {
+      "id": "cccs-2035",
+      "date": "2035-12-31",
+      "precision": "year",
+      "authority": "CCCS",
+      "framework": "Government of Canada PQC roadmap",
+      "kind": "deadline",
+      "title": "All remaining systems migrated",
+      "detail": "Migration of remaining systems completes by the end of 2035.",
+      "source": "ITSM.40.001, Roadmap for the migration to post-quantum cryptography for the Government of Canada"
+    },
+    {
+      "id": "asd-2030",
+      "date": "2030-12-31",
+      "precision": "year",
+      "authority": "ASD",
+      "framework": "Australian ISM",
+      "kind": "deadline",
+      "title": "Traditional asymmetric cryptography retired",
+      "detail": "Traditional asymmetric cryptography such as RSA, ECDH and ECDSA is not approved for use beyond 2030.",
+      "source": "Australian Signals Directorate, Information Security Manual (December 2024 update)"
+    }
+  ]
+}

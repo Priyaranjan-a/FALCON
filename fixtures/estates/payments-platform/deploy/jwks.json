@@ -1,0 +1,21 @@
+{
+  "keys": [
+    {
+      "kty": "RSA",
+      "kid": "receipts-2026",
+      "use": "sig",
+      "alg": "RS256",
+      "e": "AQAB",
+      "n": "yBfB-w7xDjTOJenK1iNmXxOOJd7_mlHGkevgrEEquHnbeigYG7cc89t7Ch6pkDJjJMcmgmBTtBVDGhwxIYbpZuTsQfX9iYVIXGwqrwQIH-jQjZpbN0vRrDsoQsqEbsvoTlaY6lniULum_1qD0MvisaTlR-ta0MiDGYWWC-WsvanTXhib818IixtuPmUi5AAr-wLrrW-T6-utUbTswPt7czBb0uQTtr47pqNU8uMl-MrCvEATS3c7FRGAxMV6B9l7wrHo4LXUtecBYOwI0c6N_JlzX4kjVCUqqU41Q6fjHlmvvGxubvRfqSX4ZwZl9aKPdqsnSTxkHj1L1BXdzq4ezQ"
+    },
+    {
+      "kty": "EC",
+      "kid": "device-2026",
+      "use": "sig",
+      "alg": "ES256",
+      "crv": "P-256",
+      "x": "f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU",
+      "y": "x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0"
+    }
+  ]
+}
