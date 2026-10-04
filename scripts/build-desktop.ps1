@@ -33,7 +33,7 @@ finally { Pop-Location }
 Push-Location (Join-Path $root "desktop")
 try {
     npm install --no-audit --no-fund
-    npx tauri build
+    npx tauri build --bundles nsis,msi
     if ($LASTEXITCODE -ne 0) { throw "The desktop build failed." }
 }
 finally { Pop-Location }

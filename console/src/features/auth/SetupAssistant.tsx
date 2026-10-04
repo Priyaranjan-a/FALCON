@@ -81,7 +81,7 @@ export default function SetupAssistant() {
   if (done) return <Finished name={done.user.name.split(" ")[0]} organisation={done.organisation?.name ?? ""} onEnter={enter} />;
 
   return (
-    <div className="flex min-h-dvh flex-col bg-bg">
+    <div className="flex h-dvh flex-col overflow-x-hidden overflow-y-auto bg-bg">
       <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 h-[55vh]" style={{ background: "radial-gradient(55% 50% at 50% 0%, var(--accent-tint) 0%, transparent 70%)" }} />
       <header className="relative flex items-center justify-between px-6 py-5">
         <div className="flex items-center gap-2.5">
